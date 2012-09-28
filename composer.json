@@ -1,0 +1,24 @@
+{
+    "name": "lumberjacked/CommandConsole",
+    "description": "Command Console to generate zf2 files",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Spencer Bragg",
+            "email": "sbragg.braggaboutsystems@gmail.com"
+        }
+    ],
+    "minimum-stability":"dev",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/Console": "dev-master"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "BAS": "src/"
+        }
+    }
+
+}
