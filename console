@@ -4,6 +4,12 @@
 use BAS\CommandConsole\Commands\GreetCommand,
     Symfony\Component\Console\Application;
 
+if(file_exists(__DIR__ . '/vendor/autoload.php')){
+    require_once 'vendor/autoload.php';
+} else {
+    echo 'Run `php composer.phar install` to get project dependencies';
+}
+
 $application = new Application();
 $application->add(new GreetCommand);
 $application->run();
