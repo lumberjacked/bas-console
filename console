@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+use BAS\CommandConsole\Commands\GreetCommand,
+    Symfony\Component\Console\Application;
+
+$application = new Application();
+$application->add(new GreetCommand);
+$application->run();

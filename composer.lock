@@ -1,5 +1,5 @@
 {
-    "hash": "72779530fe020e0011802462cba50f6e",
+    "hash": "450ededdcfd1b07b873d028288c46cd8",
     "packages": [
         {
             "name": "symfony/console",
@@ -8,18 +8,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "0be8fcc7be5529db08278d21ebc6c51f8216144a"
+                "reference": "01a84f8e0549424fd742baa5c0abfbc656e1864b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/zipball/0be8fcc7be5529db08278d21ebc6c51f8216144a",
-                "reference": "0be8fcc7be5529db08278d21ebc6c51f8216144a",
+                "url": "https://github.com/symfony/Console/zipball/01a84f8e0549424fd742baa5c0abfbc656e1864b",
+                "reference": "01a84f8e0549424fd742baa5c0abfbc656e1864b",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1348209299",
+            "time": "1348854729",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -29,7 +29,7 @@
             "installation-source": "source",
             "autoload": {
                 "psr-0": {
-                    "Symfony\\Component\\Console": ""
+                    "Symfony\\Component\\Console\\": ""
                 }
             },
             "license": [
