@@ -1,15 +1,16 @@
 #!/usr/bin/env php
 <?php
 
-use BAS\CommandConsole\Commands\GreetCommand,
+use BAS\zf2\ConsoleCommands,
     Symfony\Component\Console\Application;
 
 if(file_exists(__DIR__ . '/vendor/autoload.php')){
     require_once 'vendor/autoload.php';
 } else {
-    echo 'Run `php composer.phar install` to get project dependencies';
+    die('Run `php composer.phar install` to get project dependencies');
 }
 
+$commands = new ConsoleCommands();
 $application = new Application();
-$application->add(new GreetCommand);
+$application->addCommands($commands->getCommands());
 $application->run();
