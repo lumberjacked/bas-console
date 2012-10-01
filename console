@@ -5,7 +5,7 @@ use BAS\zf2\ConsoleCommands,
     Symfony\Component\Console\Application;
 
 if(file_exists(__DIR__ . '/vendor/autoload.php')){
-    require_once 'vendor/autoload.php';
+    require_once __DIR__ . '/vendor/autoload.php';
 } else {
     die('Run `php composer.phar install` to get project dependencies');
 }
