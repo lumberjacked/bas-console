@@ -12,74 +12,85 @@ class ModuleCommand extends Command
     
     protected $_namespace;
 
-    protected $_moduleFile;   
+    protected $_controller = 'Default';
 
+    protected $_md;   
+    
     protected function configure() {
+
+        $this->_md = getcwd() . '/module';
+        
         $this->setName('generate:module')->setDescription('Create a Brand Spanking New zf2 Module in an Exsisting Project!')
              ->addArgument('{ModuleName}', InputArgument::REQUIRED, 'Please choose a Name for this Module.');
 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln("<info>Creating a Module</info>");
-        $output->writeln("<comment>Things to Remember</comment>");
-        $output->writeln("<error>Required Argument -- Namespace</error>");
-        $output->writeln("<error>Required Argument -- Module Name</error>");
-        $output->writeln("<error>Maybe doesn't happen here but will need a route to each view file (This is a new command)</error>");
 
         $this->setNamespace($input->getArgument('{ModuleName}'));
 
-        $this->createDirectoryStructure();
+        $this->createModule($output);
 
         
     }
 
-    protected function createDirectoryStructure() {
+    protected function createModule(OutputInterface $output) {
+                 
+        if(is_dir($this->_md) && !is_dir($this->_md . "/{$this->getNamespace()}")) {
         
-        $structure = $this->getModuleDirectoryArray();
-        $workingDirectory = getcwd();
-        var_dump(__DIR__);
-        var_dump($workingDirectory);
-        var_dump($structure);die('structure');        
+            $this->createDirStructure($this->_md, $this->getModuleDirectoryArray()); 
+            $output->writeln("<info>{$this->getNamespace()} Directory Structure Created</info>");
+
+            $this->createFiles();
+            $output->writeln("<info>Created {$this->getNamespace()} Module Files</info>");
+
+
+
+        } else {
+            throw new \Exception("Another Module found with this Name!");
+        }       
+
 
     }
 
     protected function getModuleDirectoryArray() {
         
         return array(
-            'ModuleName' => array(
+            $this->getNamespace() => array(
                 'config',
                 'src' => array(
-                    'ModuleName' => array(
+                    $this->getNamespace() => array(
                         'Controller',
                         'Form',
                         'Model',
                     ),
                 ),
                 'view' => array(
-                    'ModuleNameLower' => array(
+                    strtolower($this->getNamespace()) => array(
                         'ControllerNameLower'
                     )
                 )
             )                
         );
+    }
 
+    protected function getFileStructure() {
+        
+        $namespace = $this->getNamespace();
+        $structure = array(
+                        'Module.php'            => $this->_md . "/{$namespace}",
+                        'autoload_classmap.php' => $this->_md . "/{$namespace}", 
+                        'module.config.php'     => $this->_md . "/{$namespace}/config"
+                      );
+     
+        return $structure; 
     }
 
     protected function getModuleFile() {
         
-        if(null !== $this->_moduleFile) {
-            return $this->_moduleFile;
-        } else {
-            $this->setModuleFile();
-            return $this->_moduleFile;
-        }
-    }
-
-    protected function setModuleFile() {
-        $this->_moduleFile =
-<<<MODULE
+        return <<<MODULE
 // module/{$this->getNamespace()}/Module.php
+<?php
 namespace {$this->getNamespace()};
 
 class Module {
@@ -102,8 +113,37 @@ class Module {
     }
 }
 MODULE;
-  
-        return $this->_moduleFile;
+
+    }
+
+    protected function getAutoloadMapFile() {
+        
+        return <<<MAP
+// module/{$this->getNamespace()}/autoload_classmap.php
+<?php
+return array();
+MAP;
+    }
+
+    protected function getModuleConfigFile() {
+        
+        $lowerNamedspace = strtolower($this->getNamespace());
+        return <<<CONFIG
+// module/{$this->getNamespace()}/config/module.config.php
+<?php
+return array(
+    'controllers' => array(
+        'invokables' => array(
+            '{$this->getNamespace()}\Controller\Default' => '{$this->getNamespace()}\Controller\DefaultController',
+        ),
+    ),
+    'view_manager' => array(
+        'template_path_stack' => array(
+            '{$lowerNamedspace}' => __DIR__ . '/../view',
+        ),
+    ),
+);
+CONFIG;
     }
 
     protected function getNamespace() {
@@ -115,6 +155,53 @@ MODULE;
             $this->_namespace = ucfirst($namespace);
         }
         return $this->_namespace;
+    }
+
+    protected function createDirStructure($base_path = null, $structure = null, $file_mode = 0755) {
+       
+        if(null !== $base_path || null !== $structure) {
+            foreach($structure as $key => $value) {
+             
+                $dir = is_string($key) ? $key : $value;
+                $path = $base_path . '/' . $dir;
+
+                    if(!file_exists($path)) {              
+                        mkdir($path, $file_mode);
+                    } else {
+                        chmod($path, $file_mode);    
+                    }
+
+                if(is_array($value)) {
+                    $this->createDirStructure($path, $value);
+                }
+
+            }   
+        }    
+    }
+
+    protected function createFiles() {
+        
+        $structure = $this->getFileStructure();
+
+        foreach($structure as $file => $path) {
+            
+            $handle = fopen($path . "/{$file}", 'w') or die('Cannot open file: ' . $file);
+
+            switch($file) {
+                case 'Module.php':
+                    $data = $this->getModuleFile();
+                    break;
+                case 'autoload_classmap.php':
+                    $data = $this->getAutoloadMapFile();
+                    break;
+                case 'module.config.php':
+                    $data = $this->getModuleConfigFile();
+                    break;
+            }
+
+            fwrite($handle, $data);
+            fclose($handle);
+        }
     }
 
 }
