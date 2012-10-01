@@ -21,14 +21,20 @@ class ModuleCommand extends Command
         $this->_md = getcwd() . '/module';
         
         $this->setName('generate:module')->setDescription('Create a Brand Spanking New zf2 Module in an Exsisting Project!')
-             ->addArgument('{ModuleName}', InputArgument::REQUIRED, 'Please choose a Name for this Module.');
+             ->addArgument('{ModuleName}', InputArgument::REQUIRED, 'Please choose a Name for this Module.')
+             ->addArgument('{ControllerName}', InputArgument::OPTIONAL, 'Enter a Default Controller Name!');
 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
 
         $this->setNamespace($input->getArgument('{ModuleName}'));
-
+        $controller = $input->getArgument('{ControllerName}');
+        
+        if($controller) {
+            $this->setController($controller);
+        }
+        
         $this->createModule($output);
 
         
@@ -37,7 +43,7 @@ class ModuleCommand extends Command
     protected function createModule(OutputInterface $output) {
                  
         if(is_dir($this->_md) && !is_dir($this->_md . "/{$this->getNamespace()}")) {
-        
+          
             $this->createDirStructure($this->_md, $this->getModuleDirectoryArray()); 
             $output->writeln("<info>{$this->getNamespace()} Directory Structure Created</info>");
 
@@ -67,7 +73,7 @@ class ModuleCommand extends Command
                 ),
                 'view' => array(
                     strtolower($this->getNamespace()) => array(
-                        'ControllerNameLower'
+                        strtolower($this->getController())
                     )
                 )
             )                
@@ -155,6 +161,17 @@ CONFIG;
             $this->_namespace = ucfirst($namespace);
         }
         return $this->_namespace;
+    }
+
+    protected function getController() {
+        return $this->_controller;
+    }
+
+    protected function setController($controller = null) {
+        if(null !== $controller) {
+            $this->_controller = ucfirst($controller);
+        }
+        return $this->_controller;
     }
 
     protected function createDirStructure($base_path = null, $structure = null, $file_mode = 0755) {
