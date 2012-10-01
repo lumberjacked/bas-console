@@ -36,7 +36,7 @@ class AppCommand extends Command
         
         passthru("cd {$workingDirectory}; php composer.phar install");
         
-        $output->writeln("<error>Remember to setup the vhost file to run the site!</error>");
+        $output->writeln("<error>Remember to setup your vhost file to run the site!</error>");
     }
 
     public function getUnlinkFiles() 
