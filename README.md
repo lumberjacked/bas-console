@@ -8,5 +8,7 @@
 - Alias the project to access it from anywhere.
   .bash_alias add something like --  alias zf2='~/workspace/command.console/console'
 
+- Trying something new
+
 
 
