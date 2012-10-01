@@ -20,7 +20,7 @@ class AppCommand extends Command
         $projectName = $input->getArgument('{ProjectName}');
  
         $output->writeln("<info>Cloning New Skeleton Application as {$projectName}</info>");
-        passthru("git clone git://github.com/zendframework/ZendSkeletonApplication.git {$projectName}");
+        exec("git clone git://github.com/zendframework/ZendSkeletonApplication.git {$projectName}");
         $workingDirectory = getcwd() . "/{$projectName}/";    
         
         $output->writeln("<info>Now going through and Cleaning up the files that are not needed!</info>");
@@ -36,7 +36,7 @@ class AppCommand extends Command
         
         passthru("cd {$workingDirectory}; php composer.phar install");
         
-        $output->writeln("<error>Remember to setup your vhost file to run the site!</error>");
+        $output->writeln("<error>Remember to setup your vhost file!</error>");
     }
 
     public function getUnlinkFiles() 
