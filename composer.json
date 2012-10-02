@@ -1,5 +1,5 @@
 {
-    "name": "lumberjacked/CommandConsole",
+    "name": "lumberjacked/BasConsole",
     "description": "Command Console to generate zf2 files",
     "type": "library",
     "license": "MIT",
@@ -26,7 +26,7 @@
 
     "autoload": {
         "psr-0": {
-            "BAS": "src/"
+            "BasConsole": "src/"
         }
     }
 

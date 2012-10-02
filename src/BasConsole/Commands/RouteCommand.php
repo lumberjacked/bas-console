@@ -1,5 +1,5 @@
 <?php 
-namespace BAS\zf2\Commands;
+namespace BasConsole\Commands;
 
 use Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputArgument,

@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-use BAS\zf2\ConsoleCommands,
-    Symfony\Component\Console\Application;
+use Zend\ServiceManager\ServiceManager,
+    BasConsole\Module;
 
 if(file_exists(__DIR__ . '/vendor/autoload.php')){
     require_once __DIR__ . '/vendor/autoload.php';
@@ -10,7 +10,8 @@ if(file_exists(__DIR__ . '/vendor/autoload.php')){
     die('Run `php composer.phar install` to get project dependencies');
 }
 
-$commands = new ConsoleCommands();
-$application = new Application();
-$application->addCommands($commands->getCommands());
+$module         = new Module();
+$serviceManager = new ServiceManager($module->getServiceConfig());
+$application = $serviceManager->get('ConsoleApp');
+var_dump($application);die('app');
 $application->run();

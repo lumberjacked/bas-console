@@ -1,13 +1,11 @@
 <?php
+namespace BasConsole;
 
-namespace BAS\CommandConsole;
-
-use Zend\ServiceManager\ConfigInterface;
-
-class Module implements ConfigInterface {
+class Module {
 
     public function getServiceConfig() {
-        return array();
-    }
+        
+        return new Services\ServiceConfiguration();
+    } 
 
 }

@@ -1,6 +1,5 @@
 <?php 
-namespace BAS\zf2;
-
+namespace BasConsole\Services;
 
 class ConsoleCommands 
 {
@@ -11,9 +10,9 @@ class ConsoleCommands
 	}
 
 	private function createCommands() {
-        if(is_dir(__DIR__ . '/Commands')) {
-		    
-            if($handle = opendir(__DIR__ . '/Commands')) {
+        if(is_dir(__DIR__ . '/../Commands')) {
+		    $dir = __DIR__ . '/../Commands';   
+            if($handle = opendir($dir)) {
 			    $commands = array();
                 
                 while (false !== ($string = readdir($handle))) {
