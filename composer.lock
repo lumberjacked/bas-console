@@ -1,5 +1,5 @@
 {
-    "hash": "450ededdcfd1b07b873d028288c46cd8",
+    "hash": "21bbd3d577a73edc7f1dc752ce2c28a5",
     "packages": [
         {
             "name": "symfony/console",
@@ -8,18 +8,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "01a84f8e0549424fd742baa5c0abfbc656e1864b"
+                "reference": "c4ed7ef2c51e1a44dc138e16054396860f512e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/zipball/01a84f8e0549424fd742baa5c0abfbc656e1864b",
-                "reference": "01a84f8e0549424fd742baa5c0abfbc656e1864b",
+                "url": "https://github.com/symfony/Console/zipball/c4ed7ef2c51e1a44dc138e16054396860f512e99",
+                "reference": "c4ed7ef2c51e1a44dc138e16054396860f512e99",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1348854729",
+            "time": "1349015269",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -47,6 +47,39 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com"
+        },
+        {
+            "name": "zendframework/zend-servicemanager",
+            "version": "2.0.2",
+            "target-dir": "Zend/ServiceManager",
+            "dist": {
+                "type": "zip",
+                "url": "http://packages.zendframework.com/composer/Zend_ServiceManager-2.0.2.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "zendframework/zend-di": "Zend\\Di component"
+            },
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Zend\\ServiceManager": ""
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": " ",
+            "homepage": "http://packages.zendframework.com/",
+            "keywords": [
+                "zf2",
+                "servicemanager"
+            ]
         }
     ],
     "packages-dev": null,

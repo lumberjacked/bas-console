@@ -26,18 +26,7 @@ class RouteCommand extends Command
     }
 
     protected function getDescript() {
-        return <<<DEC
-Add a Route to your Project (Routes are case - insensitive)
-Possible Routes
---- Hostname
---- Literal
---- Method
---- Part
---- Regex
---- Scheme
---- Segment (Default)
---- Query
-DEC;
+        return 'Add a Route to your Project (Segment Default -(Routes are case - insensitive)';
 
     }
 

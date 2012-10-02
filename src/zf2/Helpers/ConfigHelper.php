@@ -30,6 +30,7 @@ class ConfigHelper
     }
 
     public function getApplicationConfig() {
+        
         if(null != $this->application_config) {
             return $this->application_config;
         } else {
@@ -38,6 +39,4 @@ class ConfigHelper
     }
 
         
-
-
 }
