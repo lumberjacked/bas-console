@@ -1,2 +1,11 @@
 <?php 
-return array();
+return array(
+    'console' => array(
+        'commands' => array(
+            'AppCommand',
+            'GreetCommand',
+            'ModuleCommand',
+            'RouteCommand',
+        ),
+    ),
+);

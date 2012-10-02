@@ -13,5 +13,4 @@ if(file_exists(__DIR__ . '/vendor/autoload.php')){
 $module         = new Module();
 $serviceManager = new ServiceManager($module->getServiceConfig());
 $application = $serviceManager->get('ConsoleApp');
-var_dump($application);die('app');
 $application->run();

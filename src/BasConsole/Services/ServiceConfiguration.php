@@ -1,7 +1,9 @@
 <?php 
 namespace BasConsole\Services;
 
-use Zend\ServiceManager\Config;
+use Zend\ServiceManager\Config,
+    Symfony\Component\Console\Application,
+    BasConsole\Factories;
 
 class ServiceConfiguration extends Config {
 
@@ -13,20 +15,28 @@ class ServiceConfiguration extends Config {
         return array(
             'aliases' => array(
                 'Symfony\Component\Console\Application' => 'ConsoleApp',
+                'BasConsole\Module'                     => 'BasModule',
             ),
             'factories' => array(
                 'ConsoleApp' => function($sm) {
-                    $commands = new ConsoleCommands();
-                    $app      = new ConsoleApp($commands->getCommands());
+                    $factory  = $sm->get('ConsoleCommandsFactory'); 
+                    $app      = new Application();
+                    $app->addCommands($factory->getCommands());
+                    return $app;
+                },
+                'ConsoleCommandsFactory' => function($sm) {
+                    $module = $sm->get('BasModule');
+                    $factory = new Factories\ConsoleCommandsFactory($sm, $module->getConfig());
+                    return $factory;
                 }
             ),
 
             'invokables' => array(
-                'AppCommand'      => 'BasConsole\Commands\AppCommand',
-                'ConsoleCommands' => 'BasConsole\Services\ConsoleCommands',
-                'GreetCommand'    => 'BasConsole\Commands\GreetCommand',
-                'ModuleCommand'   => 'BasConsole\Commands\ModuleCommand',
-                'RouteCommand'    => 'BasConsole\Commands\RouteCommand',
+                'AppCommand'             => 'BasConsole\Commands\AppCommand',
+                'BasModule'              => 'BasConsole\Module',
+                'GreetCommand'           => 'BasConsole\Commands\GreetCommand',
+                'ModuleCommand'          => 'BasConsole\Commands\ModuleCommand',
+                'RouteCommand'           => 'BasConsole\Commands\RouteCommand',
             )
         );
     }

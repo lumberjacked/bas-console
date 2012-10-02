@@ -14,7 +14,7 @@ class RouteCommand extends Command
 
     protected function configure()
     {
-        $this->config = new ConfigHelper();
+        //$this->config = new ConfigHelper();
         
         $this->setName('route:add')->setDescription($this->getDescript())
              ->addArgument('{RouteName}', InputArgument::REQUIRED, 'Choose a name for this route.')
