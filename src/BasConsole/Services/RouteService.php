@@ -1,33 +1,27 @@
 <?php
 namespace BasConsole\Services;
 
+use BasConsole\Objects\RouteObject;
 
 class RouteService {
 
-    protected $routeName;
+    protected $routeObject;
 
-    protected $routeModule;
-
-    protected $routeType;
-    
-    public function __construct() {
-
+    public function __construct(RouteObject $routeObject) {
+        $this->routeObject = $routeObject;
     }
-
+    
     public function executeCommand() {
-        $this->checkModule($routeModule);
+        $this->buildRoute();       
     }
 
-    public function setRouteName($routeName = null) {
-        $this->routeName = $routeName;
+    public function getRouteObject() {
+        return $this->routeObject;
     }
 
-    public function setRouteType($routeType = null) {
-        $this->routeType = $routeType;
-    }
+    private function buildRoute() {
+        $config = $this->routeObject->getConfig();
 
-    public function setModuleName($routeModule = null) {
-        $this->routeModule = $routeModule;
-    }
-    
+        
+    }  
 }

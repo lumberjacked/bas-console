@@ -11,26 +11,21 @@ use Symfony\Component\Console\Command\Command,
 class RouteCommand extends Command 
 {
     protected $routeService; 
-
-    public function __construct(RouteService $routeService) {
-        $this->routeService = $routeService;
-    }
     
     protected function configure()
     {   
         $this->setName('route:add')->setDescription($this->getDescript())
              ->addArgument('{RouteName}', InputArgument::REQUIRED, 'Choose a name for this route.')
+             ->addArgument('{Route}', InputArgument::REQUIRED, 'Choose the actual route ex. /Demo/Album/testing')
              ->addOption('type', null, InputOption::VALUE_REQUIRED, 'Choose a Route Type!', 'Segment')
-             ->addOption('module', null, InputOption::VALUE_REQUIRED, 'Choose the Module to add this Route to');
+             ->addOption('module', null, InputOption::VALUE_REQUIRED, 'Choose the Module to add this Route to', 'Application');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {
-        
-        $this->routeService->setRouteName($input->getArgument('{RouteName}'));
-        $this->routeService->setRouteType($input->getOption('type'));
-        $this->routeService->setRouteModule($input->getOption('module'));
-
-        $message = $this->routeService->executeCommand();
+         
+        $routeObject =$this->routeService->getRouteObject();
+        $routeObject->setArguments($input->getArguments())->setOptions($input->getOptions());
+        $this->routeService->executeCommand();
 
 
     }
@@ -38,6 +33,10 @@ class RouteCommand extends Command
     private function getDescript() {
         return 'Add a Route to your Project (Segment Default -(Routes are case - insensitive)';
 
+    }
+
+    public function setterInjector(RouteService $routeService) {
+        $this->routeService = $routeService;
     }
 
 }

@@ -3,7 +3,9 @@ namespace BasConsole\Services;
 
 use Zend\ServiceManager\Config,
     Symfony\Component\Console\Application,
-    BasConsole\Factories;
+    BasConsole\Factories,
+    BasConsole\Commands,
+    BasConsole\Objects;
 
 class ServiceConfiguration extends Config {
 
@@ -28,15 +30,35 @@ class ServiceConfiguration extends Config {
                     $module = $sm->get('BasModule');
                     $factory = new Factories\ConsoleCommandsFactory($sm, $module->getConfig());
                     return $factory;
+                },
+                
+                'RouteCommand' => function($sm) {
+                    $service = $sm->get('RouteService');
+                    $command = new Commands\RouteCommand();
+                    $command->setterInjector($service);
+                    return $command;    
+                },
+
+                'RouteObject' => function($sm) {
+                    $helper = $sm->get('ConfigHelper');
+                    $routeObject = new Objects\RouteObject($helper);
+                    return $routeObject;    
+                },
+
+                'RouteService' => function($sm) {
+                    $routeObject = $sm->get('RouteObject');
+                    $service     = new RouteService($routeObject);
+                    return $service;
                 }
+                
             ),
 
             'invokables' => array(
                 'AppCommand'             => 'BasConsole\Commands\AppCommand',
                 'BasModule'              => 'BasConsole\Module',
+                'ConfigHelper'           => 'BasConsole\Helpers\ConfigHelper',
                 'GreetCommand'           => 'BasConsole\Commands\GreetCommand',
                 'ModuleCommand'          => 'BasConsole\Commands\ModuleCommand',
-                'RouteCommand'           => 'BasConsole\Commands\RouteCommand',
             )
         );
     }

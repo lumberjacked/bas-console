@@ -1,42 +1,16 @@
 <?php 
-namespace BAS\zf2\Helpers;
+namespace BasConsole\Helpers;
 
 class ConfigHelper 
 {
-    protected $wd;
+    private $workingDir;
 
-    protected $application_config;
-    
     public function __construct() {
-        
-        $this->setWorkingDir(getcwd());
-        $this->setApplicationConfig();
-        
+        $this->workingDir = getcwd();
     }
 
-    protected function setWorkingDir($wd = null) {
-        if(null != $wd) {
-            $this->wd = $wd;
-        }
-        return $this->wd;
+    public function getConfig() {
+        var_dump($this->workingDir);die('working');
     }
-
-    protected function setApplicationConfig() {
-        
-        if(is_file($this->wd . '/config/application.config.php')) {
-            $this->application_config = include $this->wd . '/config/application.config.php';
-        }
-        return $this->application_config;        
-    }
-
-    public function getApplicationConfig() {
-        
-        if(null != $this->application_config) {
-            return $this->application_config;
-        } else {
-            $this->setApplicationConfig();
-        }
-    }
-
         
 }
