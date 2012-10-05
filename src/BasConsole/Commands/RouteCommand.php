@@ -18,7 +18,9 @@ class RouteCommand extends Command
              ->addArgument('{RouteName}', InputArgument::REQUIRED, 'Choose a name for this route.')
              ->addArgument('{Route}', InputArgument::REQUIRED, 'Choose the actual route ex. /Demo/Album/testing')
              ->addOption('type', null, InputOption::VALUE_REQUIRED, 'Choose a Route Type!', 'Segment')
-             ->addOption('module', null, InputOption::VALUE_REQUIRED, 'Choose the Module to add this Route to', 'Application');
+             ->addOption('module', null, InputOption::VALUE_REQUIRED, 'Choose the Module to add this Route to', 'Application')
+             ->addOption('defaults', null, InputOption::VALUE_REQUIRED, 'Choose Defaults for this route.')
+             ->addOption('path', null, InputOption::VALUE_REQUIRED, 'Choose a path to use, if not already in the root project directory');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) {

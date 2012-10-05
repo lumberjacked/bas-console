@@ -40,8 +40,9 @@ class ServiceConfiguration extends Config {
                 },
 
                 'RouteObject' => function($sm) {
-                    $helper = $sm->get('ConfigHelper');
-                    $routeObject = new Objects\RouteObject($helper);
+                    $configHelper = $sm->get('ConfigHelper');
+                    $stringHelper = $sm->get('StringHelper');
+                    $routeObject = new Objects\RouteObject($configHelper, $stringHelper);
                     return $routeObject;    
                 },
 
@@ -59,6 +60,7 @@ class ServiceConfiguration extends Config {
                 'ConfigHelper'           => 'BasConsole\Helpers\ConfigHelper',
                 'GreetCommand'           => 'BasConsole\Commands\GreetCommand',
                 'ModuleCommand'          => 'BasConsole\Commands\ModuleCommand',
+                'StringHelper'           => 'BasConsole\Helpers\StringHelper'
             )
         );
     }

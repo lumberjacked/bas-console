@@ -12,16 +12,11 @@ class RouteService {
     }
     
     public function executeCommand() {
-        $this->buildRoute();       
+        $this->routeObject->buildRoute();       
     }
 
     public function getRouteObject() {
         return $this->routeObject;
     }
-
-    private function buildRoute() {
-        $config = $this->routeObject->getConfig();
-
-        
-    }  
+ 
 }

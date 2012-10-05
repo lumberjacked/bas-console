@@ -5,13 +5,47 @@ class ConfigHelper
 {
     private $workingDir;
 
+    private $configPath;
+
     public function __construct() {
         $this->workingDir = getcwd();
     }
 
-    public function getConfig($moduleName = null) {
-        //var_dump($this->recursiveGlob($this->workingDir, 'application.config.php'));die();
-        var_dump($this->recursiveGlob($this->workingDir, 'module.config.php'));die();
+    public function getConfig($path = null, $moduleName = null) {
+        return $this->checkIfDirectoryIsActive($path, $moduleName);
+    }
+
+    public function getConfigPath() {
+        // Returning this for now but needs to check if set then return if not then run a setter on the path
+        return $this->configPath;
+    }
+
+    protected function setConfigPath($path) {
+        $this->configPath = $path;    
+    }
+
+    protected function checkIfDirectoryIsActive($path, $moduleName) {
+        if(null == $path) {
+            if(null !== $moduleName) {
+                if(is_file($this->workingDir . "/module/{$moduleName}/config/module.config.php")) {
+                    $configPath = $this->workingDir . "/module/{$moduleName}/config/module.config.php"; 
+                    $this->setConfigPath($configPath);
+                    return include $configPath; 
+                } else {
+                    throw new \Exception("Could not find 'module.config.php' for Module {$moduleName}. Supply --path='/path/to/project/root'.");
+                }
+            }        
+        } else if(null !== $path) {
+            if(null !== $moduleName) {
+                if(is_file($path . "/module/{$moduleName}/config/module.config.php")) {
+                    $configPath = $path . "/module/{$moduleName}/config/module.config.php"; 
+                    $this->setConfigPath($configPath);
+                    return include $configPath; 
+                } else {
+                    throw new \Exception("Could not find 'module.config.php' for Module {$moduleName}. Supply --path='path/to/project/root'.");
+                }          
+            }
+        }   
     }
 
     public function recursiveGlob($path, $pattern = '*', $flag = 0) {
