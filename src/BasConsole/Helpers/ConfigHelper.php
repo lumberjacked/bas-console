@@ -73,18 +73,54 @@ class ConfigHelper
         return $files;
     }
 
-    public function writeNewRouteConfig($config) {
+    public function writeNewRouteConfig($config = null) {
         
-       $testPath = "/home/lumberjacked/workspace/zf2.dev/module/Application/config/test.php";
+        
+        $testPath = "/home/lumberjacked/workspace/zf2.dev/module/Application/config/test.php";
            
         
 
        
 
-        file_put_contents($testPath, 'return ' . var_export($config, true));
+       file_put_contents($testPath, '<?php return ' . var_export($config, true) . ';');
 
          
      
+    }
+
+    public function writeChangesConfig($config) {
+        $testPath = "/home/lumberjacked/workspace/zf2.dev/module/Application/config/test.php";
+        file_put_contents($testPath, $config);
+
+        return true;
+    }
+
+    public function searchNewRouteConfig() {
+        $searchthis = "'/home/lumberjacked/workspace/zf2.dev/module/Application";
+        $count      = strlen($searchthis);
+        
+        $newFile = array();
+
+        
+        $handle = @fopen("/home/lumberjacked/workspace/zf2.dev/module/Application/config/test.php", "r");
+            if ($handle) {
+                while (!feof($handle)) {
+                    $buffer = fgets($handle);
+                    if(strpos($buffer, $searchthis) !== false) {
+                        $pos = strpos($buffer, $searchthis);
+                       
+                        $buffer = substr_replace($buffer, '__DIR__ . "', $pos, $count);
+                        $newFile[] = $buffer;
+                                          
+                    } else {
+                        $newFile[] = $buffer;
+                    }
+                    
+                }
+                fclose($handle);
+            }
+        //var_dump($newFile);die();
+        var_dump($this->writeChangesConfig($newFile));die();
     }
 
 

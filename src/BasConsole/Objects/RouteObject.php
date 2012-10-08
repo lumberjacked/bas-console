@@ -78,8 +78,8 @@ class RouteObject {
                 $config = $this->stringHelper->recursiveArrayReplace($config, "'{$this->configHelper->getDirectoryPath()}", '__DIR__ . "');
                 
                 //$config = $this->stringHelper->recursiveArrayReplace($config, '"', " ");
-                
                 var_dump($this->configHelper->writeNewRouteConfig($config));die('build route'); 
+                //var_dump($this->configHelper->searchNewRouteConfig($config));die('build route'); 
             }
         } else {
             die('false no option in config for router routes');
