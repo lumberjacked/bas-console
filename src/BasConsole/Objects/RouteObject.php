@@ -38,7 +38,7 @@ class RouteObject {
         $this->routeType   = $options['type'];
         $this->moduleName  = $options['module'];
         $this->projectPath = $options['path'];
-        $this->defaults    = $this->stringHelper->explodeString($options['defaults']);
+        $this->setRouteDefaults($options['defaults']);
         return $this;
     }
 
@@ -51,18 +51,38 @@ class RouteObject {
         }   
     }
 
+    protected function setRouteDefaults($defaults = null) {
+        if(null !== $defaults) {
+            $this->defaults = $this->stringHelper->explodeString($defaults);
+        } else {
+            $this->defaults = $defaults;
+        }
+    }
+
     public function buildRoute() {
         $config = $this->getConfig();
-
+         
         if($config['router']['routes']) {
             $router = $config['router']['routes'];
             if(in_array($this->routeName, $router)) {
-                die('route exsists');
+                throw new \Exception('I found a route in this Module with the same name.  Run route:update if you need to modify this route.');
             } else {
-                var_dump($this->getRouteArray());die();
+                $routes = array_merge($router, $this->getRouteArray());
+                $mergeRouter =array(
+                    'router' => array(
+                        'routes' => $routes,
+                    )
+                );
+                
+                $config = array_merge($config, $mergeRouter);
+                $config = $this->stringHelper->recursiveArrayReplace($config, "'{$this->configHelper->getDirectoryPath()}", '__DIR__ . "');
+                
+                //$config = $this->stringHelper->recursiveArrayReplace($config, '"', " ");
+                
+                var_dump($this->configHelper->writeNewRouteConfig($config));die('build route'); 
             }
         } else {
-            die('false');
+            die('false no option in config for router routes');
         }
     }
 
@@ -70,15 +90,23 @@ class RouteObject {
         $route = array(
             $this->routeName => array(
                     'type'    => $this->routeType,
-                    'options' => array(
-                        'route'    => $this->routeName,
-                        'defaults' => $this->defaults, 
-                    )
-                )
-      
+                    'options' => $this->getRouteOptions(),
+            ),
         );
 
         return $route;
+    }
+
+    protected function getRouteOptions() {
+        $options = array(
+               'route' => $this->route
+        );
+
+        if(null != $this->defaults) {
+            $options['defaults'] = $this->defaults;
+        }
+
+        return $options;
     }
 
 }

@@ -22,5 +22,22 @@ class StringHelper
 
         return $result;
     }
+
+    public function recursiveArrayReplace(&$array, $search, $replace) {
+        
+        foreach($array as $k => $v) {
+            if(is_array($v)) {
+               $array[$k] = $this->recursiveArrayReplace($v, $search, $replace);
+            } else {
+                
+                $array[$k] = str_replace($search, $replace, $v); 
+            }
+        }
+
+        return $array;
+
+    }
+
+    
        
 }

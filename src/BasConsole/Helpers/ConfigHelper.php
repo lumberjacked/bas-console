@@ -7,6 +7,8 @@ class ConfigHelper
 
     private $configPath;
 
+    private $directoryPath;
+
     public function __construct() {
         $this->workingDir = getcwd();
     }
@@ -21,15 +23,26 @@ class ConfigHelper
     }
 
     protected function setConfigPath($path) {
-        $this->configPath = $path;    
+        $this->configPath = $path;
+        return $this->configPath;    
+    }
+
+    protected function setDirectoryPath($path) {
+        $this->directoryPath = $path;
+    }
+
+    public function getDirectoryPath() {
+        return $this->directoryPath;    
     }
 
     protected function checkIfDirectoryIsActive($path, $moduleName) {
         if(null == $path) {
             if(null !== $moduleName) {
                 if(is_file($this->workingDir . "/module/{$moduleName}/config/module.config.php")) {
-                    $configPath = $this->workingDir . "/module/{$moduleName}/config/module.config.php"; 
-                    $this->setConfigPath($configPath);
+                    $configPath    = $this->setConfigPath($this->workingDir . "/module/{$moduleName}/config/module.config.php");
+                    $directoryPath = $this->setDirectoryPath($this->workingDir . "/module/{$moduleName}/config");    
+                    
+                    
                     return include $configPath; 
                 } else {
                     throw new \Exception("Could not find 'module.config.php' for Module {$moduleName}. Supply --path='/path/to/project/root'.");
@@ -59,5 +72,21 @@ class ConfigHelper
 
         return $files;
     }
+
+    public function writeNewRouteConfig($config) {
+        
+       $testPath = "/home/lumberjacked/workspace/zf2.dev/module/Application/config/test.php";
+           
+        
+
+       
+
+        file_put_contents($testPath, 'return ' . var_export($config, true));
+
+         
+     
+    }
+
+
         
 }
