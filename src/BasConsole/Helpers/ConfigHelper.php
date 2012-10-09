@@ -1,6 +1,10 @@
 <?php 
 namespace BasConsole\Helpers;
 
+use BasConsole\Factories\ConfigFactory,
+    Zend\Config\Config,
+    Zend\Config\Writer\PhpArray;
+
 class ConfigHelper 
 {
     private $workingDir;
@@ -9,11 +13,14 @@ class ConfigHelper
 
     private $directoryPath;
 
-    public function __construct() {
-        $this->workingDir = getcwd();
+    private $configFactory;
+
+    public function __construct($factory) {
+        $this->workingDir    = getcwd();
+        $this->configFactory = $factory;
     }
 
-    public function getConfig($path = null, $moduleName = null) {
+    public function getModuleConfig($path = null, $moduleName = null) {
         return $this->checkIfDirectoryIsActive($path, $moduleName);
     }
 
@@ -35,6 +42,10 @@ class ConfigHelper
         return $this->directoryPath;    
     }
 
+    public function getConfig(array $array = array(), $true = true) {
+        return $this->configFactory->getConfig($array, $true);
+    }
+
     protected function checkIfDirectoryIsActive($path, $moduleName) {
         if(null == $path) {
             if(null !== $moduleName) {
@@ -43,7 +54,7 @@ class ConfigHelper
                     $directoryPath = $this->setDirectoryPath($this->workingDir . "/module/{$moduleName}/config");    
                     
                     
-                    return include $configPath; 
+                    return $this->configFactory->getConfig(include $configPath, true); 
                 } else {
                     throw new \Exception("Could not find 'module.config.php' for Module {$moduleName}. Supply --path='/path/to/project/root'.");
                 }
@@ -73,43 +84,28 @@ class ConfigHelper
         return $files;
     }
 
-    public function writeNewRouteConfig($config = null) {
-        
-        
-        $testPath = "/home/lumberjacked/workspace/zf2.dev/module/Application/config/test.php";
-           
-      
+    public function newConfigToFile($config) {
+    
+        $writer = $this->configFactory->getPhpWriter();       
+        $writer->toFile($this->configPath, $config);
+        $this->replaceMagicConstants();
+    }
 
+    public function replaceMagicConstants() {
+        $searchthis = "'" . $this->getDirectoryPath();
        
-
-       file_put_contents($testPath, $data);
-
-        return true;     
-     
-    }
-
-    public function writeChangesConfig($config) {
-        $testPath = "/home/lumberjacked/workspace/zf2.dev/module/Application/config/test.php";
-        file_put_contents($testPath, $config);
-
-        return true;
-    }
-
-    public function searchNewRouteConfig() {
-        $searchthis = "'/home/lumberjacked/workspace/zf2.dev/module/Application";
         $count      = strlen($searchthis);
         
         $newFile = array();
-
-        
-        $handle = @fopen("/home/lumberjacked/workspace/zf2.dev/module/Application/config/test.php", "r");
+      
+        $handle = @fopen($this->configPath, "r");
             if ($handle) {
                 while (!feof($handle)) {
                     $buffer = fgets($handle);
                     if(strpos($buffer, $searchthis) !== false) {
                         $pos = strpos($buffer, $searchthis);
                        
-                        $buffer = substr_replace($buffer, '__DIR__ . "', $pos, $count);
+                        $buffer = substr_replace($buffer, "__DIR__ . '", $pos, $count);
                         $newFile[] = $buffer;
                                           
                     } else {
@@ -119,8 +115,27 @@ class ConfigHelper
                 }
                 fclose($handle);
             }
-        //var_dump($newFile);die();
-        var_dump($this->writeChangesConfig($newFile));die();
+        
+        $this->toFile($this->configPath, $newFile);
+    }
+
+    private function toFile($filepath, array $data = array(), $exclusiveLock = true) {
+         if (empty($filepath)) {
+            throw new \Exception('No file path specified');
+        }
+    
+        if(empty($data)) {
+            throw new \Exception('No file contents specified');
+        }
+
+        $flags = 0;
+        if ($exclusiveLock) {
+            $flags |= LOCK_EX;
+        }
+
+        file_put_contents($filepath,$data, $flags);
+     
+
     }
 
 
