@@ -22,6 +22,8 @@ class RouteObject {
 
     protected $defaults;
 
+    protected $constraints;
+
     public function __construct(Helpers\ConfigHelper $configHelper, Helpers\StringHelper $stringHelper) {
         $this->configHelper = $configHelper;
         $this->stringHelper = $stringHelper;
@@ -38,6 +40,7 @@ class RouteObject {
         $this->moduleName  = $options['module'];
         $this->projectPath = $options['path'];
         $this->setRouteDefaults($options['defaults']);
+        $this->setRouteConstraints($options['constraints']);
         return $this;
     }
 
@@ -50,6 +53,14 @@ class RouteObject {
             $this->defaults = $this->stringHelper->explodeString($defaults);
         } else {
             $this->defaults = $defaults;
+        }
+    }
+
+    protected function setRouteConstraints($constraints = null) {
+        if(null !== $constraints) {
+            $this->constraints = $this->stringHelper->explodeString($constraints);
+        } else {
+            $this->constraints = $constraints;
         }
     }
 
@@ -90,6 +101,10 @@ class RouteObject {
             }
         }
         return $options;
+    }
+
+    protected function getRouteConstraints() {
+
     }
 
 }
