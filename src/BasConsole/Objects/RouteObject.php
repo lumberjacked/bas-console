@@ -1,15 +1,14 @@
 <?php 
 namespace BasConsole\Objects;
 
-use BasConsole\Helpers;
+use BasConsole\Helpers,
+    Zend\Config\Config;
 
 class RouteObject {
     
     protected $configHelper;
 
     protected $stringHelper;
-
-    protected $config;
 
     protected $moduleName;
 
@@ -43,12 +42,7 @@ class RouteObject {
     }
 
     protected function getConfig() {
-        if(isset($this->config)) {
-            return $this->config;
-        } else {
-            $this->config = $this->configHelper->getConfig($this->projectPath, $this->moduleName);
-            return $this->config;
-        }   
+        return $this->configHelper->getModuleConfig($this->projectPath, $this->moduleName);   
     }
 
     protected function setRouteDefaults($defaults = null) {
@@ -61,51 +55,40 @@ class RouteObject {
 
     public function buildRoute() {
         $config = $this->getConfig();
- 
-        if($config['router']['routes']) {
-            $router = $config['router']['routes'];
-            if(in_array($this->routeName, $router)) {
-                throw new \Exception('I found a route in this Module with the same name.  Run route:update if you need to modify this route.');
-            } else {
-                $routes = array_merge($router, $this->getRouteArray());
-                $mergeRouter =array(
-                    'router' => array(
-                        'routes' => $routes,
-                    )
-                );
-                
-                $config = array_merge($config, $mergeRouter);
-                //$config = $this->stringHelper->recursiveArrayReplace($config, "'{$this->configHelper->getDirectoryPath()}", '__DIR__ . "');
-                
-                //$config = $this->stringHelper->recursiveArrayReplace($config, '"', " ");
-                var_dump($this->configHelper->writeNewRouteConfig($config));die('build route'); 
-                //var_dump($this->configHelper->searchNewRouteConfig($config));die('build route'); 
+        
+        foreach($config->router->routes as $name => $object) {
+            if($this->moduleName == $name) {
+                throw new \Exception('I found a route with the same name.  Run `route:update` to modify this route.');
             }
-        } else {
-            die('false no option in config for router routes');
         }
+
+        $config->router->routes->merge($this->getRoute());
+        $this->configHelper->newConfigToFile($config);
     }
 
-    protected function getRouteArray() {
-        $route = array(
-            $this->routeName => array(
-                    'type'    => $this->routeType,
-                    'options' => $this->getRouteOptions(),
-            ),
-        );
+    protected function getRoute() {
+        
+        $route = $this->configHelper->getConfig();
+        $name  = $this->routeName;
+        $route->$name = array();
+        $route->$name->type = $this->routeType;
+        $route->$name->options = $this->getRouteOptions();
 
         return $route;
     }
 
     protected function getRouteOptions() {
-        $options = array(
-               'route' => $this->route
-        );
+        
+        $options = $this->configHelper->getConfig();
 
+        $options->route = $this->route;
+       
         if(null != $this->defaults) {
-            $options['defaults'] = $this->defaults;
+            $options->defaults = array();
+            foreach($this->defaults as $k => $v) {
+                $options->defaults->$k = $v;
+            }
         }
-
         return $options;
     }
 
