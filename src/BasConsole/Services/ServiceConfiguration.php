@@ -2,9 +2,11 @@
 namespace BasConsole\Services;
 
 use Zend\ServiceManager\Config,
+    Zend\Config\Config as ConfigWriter,
     Symfony\Component\Console\Application,
     BasConsole\Factories,
     BasConsole\Commands,
+    BasConsole\Helpers,
     BasConsole\Objects;
 
 class ServiceConfiguration extends Config {
@@ -18,8 +20,18 @@ class ServiceConfiguration extends Config {
             'aliases' => array(
                 'Symfony\Component\Console\Application' => 'ConsoleApp',
                 'BasConsole\Module'                     => 'BasModule',
+                'Zend\Config\Config'                    => 'ConfigWriter'
             ),
             'factories' => array(
+                'ConfigHelper' => function($sm) {
+                    $factory = $sm->get('ConfigFactory');
+                    $config  = new Helpers\ConfigHelper($factory);
+                    return $config;
+                },
+                'ConfigWriter' => function($sm) {
+                    $writer = new ConfigWriter(array());
+                    return $writer;
+                },
                 'ConsoleApp' => function($sm) {
                     $factory  = $sm->get('ConsoleCommandsFactory'); 
                     $app      = new Application();
@@ -57,7 +69,7 @@ class ServiceConfiguration extends Config {
             'invokables' => array(
                 'AppCommand'             => 'BasConsole\Commands\AppCommand',
                 'BasModule'              => 'BasConsole\Module',
-                'ConfigHelper'           => 'BasConsole\Helpers\ConfigHelper',
+                'ConfigFactory'          => 'BasConsole\Factories\ConfigFactory',
                 'GreetCommand'           => 'BasConsole\Commands\GreetCommand',
                 'ModuleCommand'          => 'BasConsole\Commands\ModuleCommand',
                 'StringHelper'           => 'BasConsole\Helpers\StringHelper'
