@@ -61,7 +61,7 @@ class RouteObject {
 
     public function buildRoute() {
         $config = $this->getConfig();
-         
+ 
         if($config['router']['routes']) {
             $router = $config['router']['routes'];
             if(in_array($this->routeName, $router)) {
@@ -75,7 +75,7 @@ class RouteObject {
                 );
                 
                 $config = array_merge($config, $mergeRouter);
-                $config = $this->stringHelper->recursiveArrayReplace($config, "'{$this->configHelper->getDirectoryPath()}", '__DIR__ . "');
+                //$config = $this->stringHelper->recursiveArrayReplace($config, "'{$this->configHelper->getDirectoryPath()}", '__DIR__ . "');
                 
                 //$config = $this->stringHelper->recursiveArrayReplace($config, '"', " ");
                 var_dump($this->configHelper->writeNewRouteConfig($config));die('build route'); 

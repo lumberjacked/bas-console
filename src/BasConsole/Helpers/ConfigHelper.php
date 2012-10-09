@@ -78,13 +78,13 @@ class ConfigHelper
         
         $testPath = "/home/lumberjacked/workspace/zf2.dev/module/Application/config/test.php";
            
-        
+      
 
        
 
-       file_put_contents($testPath, '<?php return ' . var_export($config, true) . ';');
+       file_put_contents($testPath, $data);
 
-         
+        return true;     
      
     }
 

@@ -22,7 +22,8 @@
         "php": ">=5.3.3",
         "symfony/Console": "dev-master",
         "zendframework/zend-servicemanager": "2.0.*",
-        "zendframework/zend-json": "2.0.*"
+        "zendframework/zend-json": "2.0.*",
+        "zendframework/zend-config": "2.0.*"
     },
 
     "autoload": {
