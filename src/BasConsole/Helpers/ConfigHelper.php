@@ -47,29 +47,27 @@ class ConfigHelper
     }
 
     protected function checkIfDirectoryIsActive($path, $moduleName) {
+        
+        if(null == $moduleName) {
+            $moduleName = 'Application';
+        }
+        
         if(null == $path) {
-            if(null !== $moduleName) {
-                if(is_file($this->workingDir . "/module/{$moduleName}/config/module.config.php")) {
-                    $configPath    = $this->setConfigPath($this->workingDir . "/module/{$moduleName}/config/module.config.php");
-                    $directoryPath = $this->setDirectoryPath($this->workingDir . "/module/{$moduleName}/config");    
-                    
-                    
-                    return $this->configFactory->getConfig(include $configPath, true); 
-                } else {
-                    throw new \Exception("Could not find 'module.config.php' for Module {$moduleName}. Supply --path='/path/to/project/root'.");
-                }
-            }        
-        } else if(null !== $path) {
-            if(null !== $moduleName) {
-                if(is_file($path . "/module/{$moduleName}/config/module.config.php")) {
-                    $configPath = $path . "/module/{$moduleName}/config/module.config.php"; 
-                    $this->setConfigPath($configPath);
-                    return include $configPath; 
-                } else {
-                    throw new \Exception("Could not find 'module.config.php' for Module {$moduleName}. Supply --path='path/to/project/root'.");
-                }          
-            }
+            return $this->checkIfConfigFileIsActive($moduleName, $this->workingDir);    
+        } else if (null !== $path) {
+            return $this->checkIfConfigFileIsActive($moduleName, $path);
         }   
+    }
+
+    protected function checkIfConfigFileIsActive($moduleName, $path) {
+        if(is_file($path . "/module/{$moduleName}/config/module.config.php")) {
+            $configPath    = $this->setConfigPath($this->workingDir . "/module/{$moduleName}/config/module.config.php");
+            $directoryPath = $this->setDirectoryPath($this->workingDir . "/module/{$moduleName}/config");    
+                    
+            return $this->configFactory->getConfig(include $configPath, true); 
+        } else {
+            throw new \Exception("Could not find 'module.config.php' for Module {$moduleName}. Supply --path='/path/to/project/root'.");
+        }    
     }
 
     public function recursiveGlob($path, $pattern = '*', $flag = 0) {
@@ -88,6 +86,7 @@ class ConfigHelper
     
         $writer = $this->configFactory->getPhpWriter();       
         $writer->toFile($this->configPath, $config);
+       
         $this->replaceMagicConstants();
     }
 

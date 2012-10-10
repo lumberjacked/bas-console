@@ -2,7 +2,8 @@
 namespace BasConsole\Objects;
 
 use BasConsole\Helpers,
-    Zend\Config\Config;
+    Zend\Config\Config,
+    Zend\Config\Writer\PhpArray;
 
 class RouteObject {
     
@@ -66,7 +67,8 @@ class RouteObject {
 
     public function buildRoute() {
         $config = $this->getConfig();
-        
+        $writer = new \Zend\Config\Writer\PhpArray();
+  
         foreach($config->router->routes as $name => $object) {
             if($this->moduleName == $name) {
                 throw new \Exception('I found a route with the same name.  Run `route:update` to modify this route.');
@@ -75,6 +77,7 @@ class RouteObject {
 
         $config->router->routes->merge($this->getRoute());
         $this->configHelper->newConfigToFile($config);
+        return $writer->toString($this->getRoute());
     }
 
     protected function getRoute() {

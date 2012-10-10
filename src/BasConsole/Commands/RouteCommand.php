@@ -26,11 +26,12 @@ class RouteCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output) {
          
-        $routeObject =$this->routeService->getRouteObject();
+        $routeObject = $this->routeService->getRouteObject();
         $routeObject->setArguments($input->getArguments())->setOptions($input->getOptions());
-        $this->routeService->executeCommand();
-
-
+        $message = $this->routeService->executeCommand();
+         
+        $output->writeln("<info>Route Added to Module Config File --</info>");
+        $output->writeln("<comment>{$message}</comment>");
     }
 
     private function getDescript() {
