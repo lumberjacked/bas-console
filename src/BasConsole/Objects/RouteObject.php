@@ -6,8 +6,6 @@ use BasConsole\Services\RouteService,
     Zend\Config\Writer\PhpArray;
 
 class RouteObject {
-    
-    protected $routeService;
 
     protected $moduleName;
 
@@ -23,9 +21,13 @@ class RouteObject {
 
     protected $constraints;
 
-    public function __construct(RouteService $routeService) {
-        $this->routeService = $routeService;
+    public function __construct() {
+    
     }
+
+    public function executeCommand() {
+        
+    } 
     
     public function setArguments($arguments) {
         $this->routeName = $arguments['{RouteName}'];
@@ -42,9 +44,7 @@ class RouteObject {
         return $this;
     }
 
-    protected function getConfig() {
-        //return $this->configHelper->getModuleConfig($this->projectPath, $this->moduleName);   
-    }
+    
 
     protected function setRouteDefaults($defaults = null) {
         if(null !== $defaults) {
@@ -61,22 +61,7 @@ class RouteObject {
             $this->constraints = $constraints;
         }
     }
-
-    public function buildRoute() {
-        $config = $this->getConfig();
-        $writer = new \Zend\Config\Writer\PhpArray();
-  
-        foreach($config->router->routes as $name => $object) {
-            if($this->moduleName == $name) {
-                throw new \Exception('I found a route with the same name.  Run `route:update` to modify this route.');
-            }
-        }
-
-        $config->router->routes->merge($this->getRoute());
-        //$this->configHelper->newConfigToFile($config);
-        return $writer->toString($this->getRoute());
-    }
-
+ 
     protected function getRoute() {
         
         //$route = $this->configHelper->getConfig();

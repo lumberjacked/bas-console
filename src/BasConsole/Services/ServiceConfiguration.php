@@ -44,23 +44,23 @@ class ServiceConfiguration extends Config {
                     return $factory;
                 },
                 
-                'RouteCommand' => function($sm) {
-                    $routeObject = $sm->get('RouteObject');
-                    $command = new Commands\RouteCommand();
-                    $command->setterInjector($routeObject);
+                'RouteAddCommand' => function($sm) {
+                    $routeService = $sm->get('RouteService');
+                    $command = new Commands\RouteAddCommand();
+                    $command->setterInjector($routeService);
                     return $command;    
                 },
 
                 'RouteObject' => function($sm) {
-                    $routeService = $sm->get('RouteService');
-                    $routeObject = new Objects\RouteObject($routeService);
+                    $routeObject = new Objects\RouteObject();
                     return $routeObject;    
                 },
 
                 'RouteService' => function($sm) {
+                    $routeObject  = $sm->get('RouteObject');
                     $configHelper = $sm->get('ConfigHelper');
                     $stringHelper = $sm->get('StringHelper');
-                    $service     = new RouteService($configHelper, $stringHelper);
+                    $service      = new RouteService($routeObject, $configHelper, $stringHelper);
                     return $service;
                 }
                 

@@ -5,7 +5,7 @@ return array(
             'AppCommand',
             'GreetCommand',
             'ModuleCommand',
-            'RouteCommand',
+            'RouteAddCommand',
         ),
     ),
 );
