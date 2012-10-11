@@ -27,6 +27,11 @@ class RouteService {
         return $this;
     }
 
+    public function setDefaultType($type = null) {
+        $this->routeObject->setDefaultType($type);
+        return $this;
+    }
+
     public function setOptions($options) {
         
         if(null !== $options['defaults']) {

@@ -51,6 +51,13 @@ class ServiceConfiguration extends Config {
                     return $command;    
                 },
 
+                'RouteAddChildCommand' => function($sm) {
+                    $routeService = $sm->get('RouteService');
+                    $command = new Commands\RouteAddChildCommand();
+                    $command->setterInjector($routeService);
+                    return $command;
+                },
+
                 'RouteObject' => function($sm) {
                     $routeObject = new Objects\RouteObject();
                     return $routeObject;    

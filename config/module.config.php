@@ -6,6 +6,7 @@ return array(
             'GreetCommand',
             'ModuleCommand',
             'RouteAddCommand',
+            'RouteAddChildCommand'
         ),
     ),
 );

@@ -15,7 +15,9 @@ class RouteObject {
 
     protected $route;
 
-    protected $routeType = "Segment";
+    protected $parent;
+
+    protected $routeType = "Literal";
 
     protected $defaults;
 
@@ -24,7 +26,7 @@ class RouteObject {
     public function setArguments($arguments) {
         $this->routeName = $arguments['{RouteName}'];
         $this->route     = $arguments['{Route}'];
-        return $this;
+        $this->parent    = $arguments['{Parent}'];
     }
 
     public function setOptions($options) {
@@ -33,7 +35,12 @@ class RouteObject {
         $this->projectPath = $options['path'];
         $this->defaults    = $options['defaults'];
         $this->constraints = $options['constraints'];
-        return $this;
+    }
+
+    public function setDefaultType($type) {
+        if(null !== $type) {
+            $this->routeType = $type;
+        }    
     }
 
     public function getRouteName() {
@@ -63,22 +70,5 @@ class RouteObject {
     public function getModuleName() {
         return $this->moduleName;
     }
- 
-    
-    protected function getRouteOptions() {
-        
-        //$options = $this->configHelper->getConfig();
-
-        $options->route = $this->route;
-       
-        if(null != $this->defaults) {
-            $options->defaults = array();
-            foreach($this->defaults as $k => $v) {
-                $options->defaults->$k = $v;
-            }
-        }
-        return $options;
-    }
-
 
 }
