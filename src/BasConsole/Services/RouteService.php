@@ -1,14 +1,17 @@
 <?php
 namespace BasConsole\Services;
 
-use BasConsole\Objects\RouteObject;
+use BasConsole\Helpers;
 
 class RouteService {
 
-    protected $routeObject;
+    protected $configHelper;
 
-    public function __construct(RouteObject $routeObject) {
-        $this->routeObject = $routeObject;
+    protected $stringHelper;
+
+    public function __construct(Helpers\ConfigHelper $configHelper, Helpers\StringHelper $stringHelper) {
+        $this->configHelper = $configHelper;
+        $this->stringHelper = $stringHelper;
     }
     
     public function executeCommand() {

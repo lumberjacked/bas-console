@@ -1,15 +1,13 @@
 <?php 
 namespace BasConsole\Objects;
 
-use BasConsole\Helpers,
+use BasConsole\Services\RouteService,
     Zend\Config\Config,
     Zend\Config\Writer\PhpArray;
 
 class RouteObject {
     
-    protected $configHelper;
-
-    protected $stringHelper;
+    protected $routeService;
 
     protected $moduleName;
 
@@ -25,9 +23,8 @@ class RouteObject {
 
     protected $constraints;
 
-    public function __construct(Helpers\ConfigHelper $configHelper, Helpers\StringHelper $stringHelper) {
-        $this->configHelper = $configHelper;
-        $this->stringHelper = $stringHelper;
+    public function __construct(RouteService $routeService) {
+        $this->routeService = $routeService;
     }
     
     public function setArguments($arguments) {
@@ -46,12 +43,12 @@ class RouteObject {
     }
 
     protected function getConfig() {
-        return $this->configHelper->getModuleConfig($this->projectPath, $this->moduleName);   
+        //return $this->configHelper->getModuleConfig($this->projectPath, $this->moduleName);   
     }
 
     protected function setRouteDefaults($defaults = null) {
         if(null !== $defaults) {
-            $this->defaults = $this->stringHelper->explodeString($defaults);
+            //$this->defaults = $this->stringHelper->explodeString($defaults);
         } else {
             $this->defaults = $defaults;
         }
@@ -59,7 +56,7 @@ class RouteObject {
 
     protected function setRouteConstraints($constraints = null) {
         if(null !== $constraints) {
-            $this->constraints = $this->stringHelper->explodeString($constraints);
+            //$this->constraints = $this->stringHelper->explodeString($constraints);
         } else {
             $this->constraints = $constraints;
         }
@@ -76,13 +73,13 @@ class RouteObject {
         }
 
         $config->router->routes->merge($this->getRoute());
-        $this->configHelper->newConfigToFile($config);
+        //$this->configHelper->newConfigToFile($config);
         return $writer->toString($this->getRoute());
     }
 
     protected function getRoute() {
         
-        $route = $this->configHelper->getConfig();
+        //$route = $this->configHelper->getConfig();
         $name  = $this->routeName;
         $route->$name = array();
         $route->$name->type = $this->routeType;
@@ -93,7 +90,7 @@ class RouteObject {
 
     protected function getRouteOptions() {
         
-        $options = $this->configHelper->getConfig();
+        //$options = $this->configHelper->getConfig();
 
         $options->route = $this->route;
        

@@ -6,11 +6,11 @@ use Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface,
-    BasConsole\Services\RouteService;
+    BasConsole\Objects;
 
 class RouteCommand extends Command 
 {
-    protected $routeService; 
+    protected $routeObject; 
     
     protected function configure()
     {   
@@ -26,9 +26,9 @@ class RouteCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output) {
          
-        $routeObject = $this->routeService->getRouteObject();
-        $routeObject->setArguments($input->getArguments())->setOptions($input->getOptions());
-        $message = $this->routeService->executeCommand();
+        //$routeObject = $this->routeService->getRouteObject();
+        //$routeObject->setArguments($input->getArguments())->setOptions($input->getOptions());
+        //$message = $this->routeService->executeCommand();
          
         $output->writeln("<info>Route Added to Module Config File --</info>");
         $output->writeln("<comment>{$message}</comment>");
@@ -39,8 +39,8 @@ class RouteCommand extends Command
 
     }
 
-    public function setterInjector(RouteService $routeService) {
-        $this->routeService = $routeService;
+    public function setterInjector(Objects\RouteObject $routeObject) {
+        $this->routeObject = $routeObject;    
     }
 
 }
