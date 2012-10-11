@@ -53,7 +53,7 @@ class RouteService {
 
         $config->router->routes->merge($this->getRoute());
         $this->configHelper->newConfigToFile($config);
-        var_dump($writer->toString($this->getRoute()));die();
+       
         return $writer->toString($this->getRoute());
     }
 
@@ -89,8 +89,17 @@ class RouteService {
         $options = $this->configHelper->getConfigObject();
 
         $options->route = $this->routeObject->getRoute();
-        $defaults = $this->routeObject->getRouteDefaults(); 
-    
+        
+        $constraints = $this->routeObject->getRouteConstraints();
+        $defaults    = $this->routeObject->getRouteDefaults(); 
+        
+        if(null != $constraints) {
+            $options->constraints = array();
+            foreach($constraints as $k => $v) {
+                $options->constraints->$k = $v;
+            }
+        }
+
         if(null != $defaults) {
             $options->defaults = array();
             foreach($defaults as $k => $v) {

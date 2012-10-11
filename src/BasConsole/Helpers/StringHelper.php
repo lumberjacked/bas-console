@@ -17,7 +17,7 @@ class StringHelper
             if(count($pair) % 2) {
                 throw new \Exception('Your Key:Value pairs are incorrect');
             }
-            $result[$pair[0]] = $pair[1];
+            $result[trim($pair[0])] = trim($pair[1]);
         }
 
         return $result;
