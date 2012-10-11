@@ -42,8 +42,8 @@ class ConfigHelper
         return $this->directoryPath;    
     }
 
-    public function getConfig(array $array = array(), $true = true) {
-        return $this->configFactory->getConfig($array, $true);
+    public function getConfigObject(array $array = array(), $true = true) {
+        return $this->configFactory->getConfigObject($array, $true);
     }
 
     protected function checkIfDirectoryIsActive($path, $moduleName) {
@@ -64,7 +64,7 @@ class ConfigHelper
             $configPath    = $this->setConfigPath($this->workingDir . "/module/{$moduleName}/config/module.config.php");
             $directoryPath = $this->setDirectoryPath($this->workingDir . "/module/{$moduleName}/config");    
                     
-            return $this->configFactory->getConfig(include $configPath, true); 
+            return $this->configFactory->getConfigObject(include $configPath, true); 
         } else {
             throw new \Exception("Could not find 'module.config.php' for Module {$moduleName}. Supply --path='/path/to/project/root'.");
         }    

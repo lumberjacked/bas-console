@@ -26,8 +26,9 @@ class RouteAddCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output) {
          
-        $routeObject->setArguments($input->getArguments())->setOptions($input->getOptions());
-        $message = $this->routeObject->executeCommand();
+        $this->routeService->setArguments($input->getArguments())->setOptions($input->getOptions());
+        
+        $message = $this->routeService->executeCommand();
          
         $output->writeln("<info>Route Added to Module Config File --</info>");
         $output->writeln("<comment>{$message}</comment>");

@@ -13,7 +13,7 @@ class ConfigFactory
     
     }
 
-    public function getConfig(array $array, $true) {
+    public function getConfigObject(array $array, $true) {
         return new Config($array, $true);
     }
 

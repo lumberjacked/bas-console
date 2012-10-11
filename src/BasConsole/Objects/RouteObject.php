@@ -19,15 +19,7 @@ class RouteObject {
 
     protected $defaults;
 
-    protected $constraints;
-
-    public function __construct() {
-    
-    }
-
-    public function executeCommand() {
-        
-    } 
+    protected $constraints; 
     
     public function setArguments($arguments) {
         $this->routeName = $arguments['{RouteName}'];
@@ -39,40 +31,40 @@ class RouteObject {
         $this->routeType   = $options['type'];
         $this->moduleName  = $options['module'];
         $this->projectPath = $options['path'];
-        $this->setRouteDefaults($options['defaults']);
-        $this->setRouteConstraints($options['constraints']);
+        $this->defaults    = $options['defaults'];
+        $this->constraints = $options['constraints'];
         return $this;
     }
 
-    
-
-    protected function setRouteDefaults($defaults = null) {
-        if(null !== $defaults) {
-            //$this->defaults = $this->stringHelper->explodeString($defaults);
-        } else {
-            $this->defaults = $defaults;
-        }
+    public function getRouteName() {
+        return $this->routeName;
     }
 
-    protected function setRouteConstraints($constraints = null) {
-        if(null !== $constraints) {
-            //$this->constraints = $this->stringHelper->explodeString($constraints);
-        } else {
-            $this->constraints = $constraints;
-        }
+    public function getRoute() {
+        return $this->route;
+    }
+
+    public function getRouteType() {
+        return $this->routeType; 
+    }
+
+    public function getRouteDefaults() {
+        return $this->defaults;
+    }
+
+    public function getRouteConstraints() {
+        return $this->constraints;
+    }
+
+    public function getProjectPath() {
+        return $this->projectPath;
+    }
+
+    public function getModuleName() {
+        return $this->moduleName;
     }
  
-    protected function getRoute() {
-        
-        //$route = $this->configHelper->getConfig();
-        $name  = $this->routeName;
-        $route->$name = array();
-        $route->$name->type = $this->routeType;
-        $route->$name->options = $this->getRouteOptions();
-
-        return $route;
-    }
-
+    
     protected function getRouteOptions() {
         
         //$options = $this->configHelper->getConfig();
@@ -88,8 +80,5 @@ class RouteObject {
         return $options;
     }
 
-    protected function getRouteConstraints() {
-
-    }
 
 }
