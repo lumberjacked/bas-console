@@ -17,6 +17,7 @@ class RouteAddCommand extends Command
         $this->setName('route:add')->setDescription($this->getDescript())
              ->addArgument('{RouteName}', InputArgument::REQUIRED, 'The name used for this route.')
              ->addArgument('{Route}', InputArgument::REQUIRED, 'The actual route e.g. /Demo/Album/testing')
+             ->addOption('parent', null, InputOption::VALUE_REQUIRED, 'Make this a child route with the Parent Route Name.')
              ->addOption('type', null, InputOption::VALUE_REQUIRED, 'Route Type!', 'Segment')
              ->addOption('module', null, InputOption::VALUE_REQUIRED, 'The Module to add this Route to.', 'Application')
              ->addOption('defaults', null, InputOption::VALUE_REQUIRED, 'Defaults for this route.')
@@ -26,8 +27,8 @@ class RouteAddCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output) {
          
-        $this->routeService->setArguments($input->getArguments())->setOptions($input->getOptions());
-        
+        $this->routeService->configureRouteObject($input->getArguments(), $input->getOptions());
+       
         $message = $this->routeService->executeCommand();
          
         $output->writeln("<info>Route Added to -- {$this->routeService->getRouteObject()->getModuleName()} Module Config File --</info>");

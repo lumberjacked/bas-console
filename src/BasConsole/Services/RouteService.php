@@ -22,18 +22,13 @@ class RouteService {
         return $this->cleanUpMessage($this->buildRoute());       
     }
 
-    public function setArguments($arguments) {
-        $this->routeObject->setArguments($arguments);
-        return $this;
-    }
-
     public function setDefaultType($type = null) {
         $this->routeObject->setDefaultType($type);
         return $this;
     }
 
-    public function setOptions($options) {
-        
+    public function configureRouteObject(array $arguments, array $options) {
+         
         if(null !== $options['defaults']) {
             $options['defaults'] = $this->stringHelper->explodeString($options['defaults']); 
         }
@@ -41,8 +36,12 @@ class RouteService {
         if(null !== $options['constraints']) {
             $options['constraints'] = $this->stringHelper->explodeString($options['constraints']);
         }
-        
-        $this->routeObject->setOptions($options);
+
+        $config = array('arguments' => $arguments,
+                        'options'   => $options,
+                    );
+       
+        $this->routeObject->configureObject($config);
     }
 
     public function buildRoute() {
@@ -55,11 +54,32 @@ class RouteService {
                 throw new \Exception('I found a route with the same name.  Run `route:update` to modify this route.');
             }
         }
-
-        $config->router->routes->merge($this->getRoute());
-        $this->configHelper->newConfigToFile($config);
+        
+        $routes = $this->mergeRoute($config->router->routes);
+       
+        //$config->router->routes->merge($this->getRoute());
+        $this->configHelper->newConfigToFile($routes);
        
         return $writer->toString($this->getRoute());
+    }
+
+    protected function mergeRoute($routes) {
+        $parent = $this->routeObject->getParent();
+        
+        if(null != $parent) {
+            foreach($routes as $name => $route) {
+                if($name == $parent) {
+                    $route->child_routes = array();
+                    $route->child_routes = $this->getRoute();
+                    return $routes;
+                }
+                
+            }
+        } else {
+            $routes->merge($this->getRoute());
+            return $routes;
+        }
+        
     }
 
     protected function getProjectConfig() {
@@ -114,6 +134,4 @@ class RouteService {
         return $options;
     }
 
-
- 
 }

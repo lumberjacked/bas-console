@@ -23,24 +23,32 @@ class RouteObject {
 
     protected $constraints; 
     
-    public function setArguments($arguments) {
-        $this->routeName = $arguments['{RouteName}'];
-        $this->route     = $arguments['{Route}'];
-        $this->parent    = $arguments['{Parent}'];
+    public function configureObject(array $configuration) {
+        
+        $this->setArguments($configuration['arguments']);
+        $this->setOptions($configuration['options']);
+        
+        if(null != $this->parent) {
+            $this->setRouteType('Segment');
+        }
     }
 
-    public function setOptions($options) {
+    protected function setArguments($arguments) {
+        $this->routeName = $arguments['{RouteName}'];
+        $this->route     = $arguments['{Route}'];
+    }
+
+    protected function setOptions($options) {
         $this->routeType   = $options['type'];
+        $this->parent      = $options['parent'];
         $this->moduleName  = $options['module'];
         $this->projectPath = $options['path'];
         $this->defaults    = $options['defaults'];
         $this->constraints = $options['constraints'];
     }
 
-    public function setDefaultType($type) {
-        if(null !== $type) {
-            $this->routeType = $type;
-        }    
+    protected function setRouteType($type) {
+        $this->routeType = $type;
     }
 
     public function getRouteName() {
@@ -49,6 +57,10 @@ class RouteObject {
 
     public function getRoute() {
         return $this->route;
+    }
+
+    public function getParent() {
+        return $this->parent;
     }
 
     public function getRouteType() {
