@@ -57,8 +57,8 @@ class RouteService {
         
         $routes = $this->mergeRoute($config->router->routes);
        
-        //$config->router->routes->merge($this->getRoute());
-        $this->configHelper->newConfigToFile($routes);
+        $config->router->routes->merge($routes);
+        $this->configHelper->newConfigToFile($config);
        
         return $writer->toString($this->getRoute());
     }
@@ -66,21 +66,38 @@ class RouteService {
     protected function mergeRoute($routes) {
         $parent = $this->routeObject->getParent();
         
+
         if(null != $parent) {
-            foreach($routes as $name => $route) {
-                if($name == $parent) {
-                    $route->child_routes = array();
-                    $route->child_routes = $this->getRoute();
-                    return $routes;
-                }
-                
-            }
+            $this->recursiveAddChild($routes, $parent);
+                         
         } else {
             $routes->merge($this->getRoute());
-            return $routes;
+
         }
+        return $routes;
         
     }
+
+    protected function recursiveAddChild(&$routes, $parent) {
+        
+        foreach($routes as $key => $value) {
+            
+            if($key == $parent) {
+                if(isset($value['child_routes'])) {
+                    $value->child_routes->merge($this->getRoute());
+                    
+                } else {
+                    $value->child_routes = array();
+                    $value->child_routes->merge($this->getRoute());
+                }
+            } else if (isset($value['child_routes'])) {
+               
+                $this->recursiveAddChild($value['child_routes'], $parent);
+            } 
+
+        }
+
+    } 
 
     protected function getProjectConfig() {
         return $this->configHelper->getModuleConfig($this->routeObject->getProjectPath(), $this->routeObject->getModuleName());   
