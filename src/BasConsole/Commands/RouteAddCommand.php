@@ -18,6 +18,7 @@ class RouteAddCommand extends Command
              ->addArgument('{RouteName}', InputArgument::REQUIRED, 'The name used for this route.')
              ->addArgument('{Route}', InputArgument::REQUIRED, 'The actual route e.g. /Demo/Album/testing')
              ->addOption('parent', null, InputOption::VALUE_REQUIRED, 'Make this a child route with the Parent Route Name.')
+             ->addOption('terminate', null, InputOption::VALUE_REQUIRED, 'Allow option may_terminate in this Route.')
              ->addOption('type', null, InputOption::VALUE_REQUIRED, 'Route Type!', 'Segment')
              ->addOption('module', null, InputOption::VALUE_REQUIRED, 'The Module to add this Route to.', 'Application')
              ->addOption('defaults', null, InputOption::VALUE_REQUIRED, 'Defaults for this route.')

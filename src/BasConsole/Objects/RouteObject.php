@@ -19,6 +19,8 @@ class RouteObject {
 
     protected $routeType = "Literal";
 
+    protected $terminate;
+
     protected $defaults;
 
     protected $constraints; 
@@ -45,10 +47,27 @@ class RouteObject {
         $this->projectPath = $options['path'];
         $this->defaults    = $options['defaults'];
         $this->constraints = $options['constraints'];
+        $this->setTerminate($options['terminate']);
     }
 
     protected function setRouteType($type) {
         $this->routeType = $type;
+    }
+
+    protected function setTerminate($terminate) {
+         
+        if(null != $terminate){
+            $terminate = strtolower($terminate);
+            if($terminate == 'true') {
+                $this->terminate = true;
+            } else if ($terminate == 'false') {
+                $this->terminate = false;
+            } else {
+                throw new \Exception('`may_terminate` option must be of type Boolean');
+            }
+        } else {
+            $this->terminate = $terminate; 
+        }
     }
 
     public function getRouteName() {
@@ -73,6 +92,10 @@ class RouteObject {
 
     public function getRouteConstraints() {
         return $this->constraints;
+    }
+
+    public function getTerminate() {
+        return $this->terminate;
     }
 
     public function getProjectPath() {

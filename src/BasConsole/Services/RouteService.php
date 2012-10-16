@@ -122,6 +122,11 @@ class RouteService {
         $route->$name = array();
         $route->$name->type = $this->routeObject->getRouteType();
         $route->$name->options = $this->getRouteOptions();
+        
+        $terminate = $this->routeObject->getTerminate();
+        if(null != $terminate) {
+            $route->$name->may_terminate = $terminate;
+        }
 
         return $route;
     }
