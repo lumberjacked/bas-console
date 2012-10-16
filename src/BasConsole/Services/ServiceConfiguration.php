@@ -62,6 +62,13 @@ class ServiceConfiguration extends Config {
                     $stringHelper = $sm->get('StringHelper');
                     $service      = new RouteService($routeObject, $configHelper, $stringHelper);
                     return $service;
+                },
+
+                'RouteUpdateCommand' => function($sm) {
+                    $routeService = $sm->get('RouteService');
+                    $command = new Commands\RouteUpdateCommand();
+                    $command->setterInjector($routeService);
+                    return $command;
                 }
                 
             ),
