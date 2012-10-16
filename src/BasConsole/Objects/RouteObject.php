@@ -30,9 +30,6 @@ class RouteObject {
         $this->setArguments($configuration['arguments']);
         $this->setOptions($configuration['options']);
         
-        if(null != $this->parent) {
-            $this->setRouteType('Segment');
-        }
     }
 
     protected function setArguments($arguments) {
@@ -41,8 +38,9 @@ class RouteObject {
     }
 
     protected function setOptions($options) {
-        $this->routeType   = $options['type'];
+        
         $this->parent      = $options['parent'];
+        $this->setRouteType($options['type']); 
         $this->moduleName  = $options['module'];
         $this->projectPath = $options['path'];
         $this->defaults    = $options['defaults'];
@@ -68,6 +66,18 @@ class RouteObject {
         } else {
             $this->terminate = $terminate; 
         }
+    }
+
+    protected function setRouteType($type) {
+        
+        if(null != $this->parent && null == $type) {
+            $this->routeType = 'Segment';
+        } else if (null == $type) {
+            $this->routeType = 'Literal';
+        } else {
+            $this->routeType = $type;
+        }
+
     }
 
     public function getRouteName() {
