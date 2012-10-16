@@ -11,13 +11,17 @@ class StringHelper
     public function explodeString($string) {
         
         $array = explode(',', $string);
-        $result = array(); 
-        foreach($array as $value) { 
-            $pair = explode(":", $value);
-            if(count($pair) % 2) {
-                throw new \Exception('Your Key:Value pairs are incorrect');
+        $result = array();
+
+        foreach($array as $value) {
+            if(!empty($value)) {
+                $pair = explode(":", $value);
+           
+                if(count($pair) % 2) {
+                    throw new \Exception('Your Key:Value pairs are incorrect');
+                }
+                $result[trim($pair[0])] = trim($pair[1]);
             }
-            $result[trim($pair[0])] = trim($pair[1]);
         }
 
         return $result;

@@ -7,6 +7,8 @@ use BasConsole\Services\RouteService,
 
 class RouteObject {
 
+    protected $_properties;
+
     protected $moduleName;
 
     protected $projectPath;
@@ -25,31 +27,24 @@ class RouteObject {
 
     protected $constraints; 
     
+    public function __construct(Config $propertiesConfig) {
+        $this->_properties = $propertiesConfig;    
+    }
+    
     public function configureObject(array $configuration) {
-        
-        $this->setArguments($configuration['arguments']);
-        $this->setOptions($configuration['options']);
-        
+        $this->setObjectProperties($configuration);
     }
-
-    protected function setArguments($arguments) {
-        $this->routeName = $arguments['{RouteName}'];
-        $this->route     = $arguments['{Route}'];
-    }
-
-    protected function setOptions($options) {
+    
+    protected function setObjectProperties(array $properties) {
         
-        $this->parent      = $options['parent'];
-        $this->setRouteType($options['type']); 
-        $this->moduleName  = $options['module'];
-        $this->projectPath = $options['path'];
-        $this->defaults    = $options['defaults'];
-        $this->constraints = $options['constraints'];
-        $this->setTerminate($options['terminate']);
-    }
+        foreach($properties as $property => $value) {
+            $this->_properties->$property = $value;    
+        }
+        var_dump($this->get('{RouteName}'));die();
+    } 
 
-    protected function setRouteType($type) {
-        $this->routeType = $type;
+    public function get($property) {
+        return $this->_properties->get($property);
     }
 
     protected function setTerminate($terminate) {
@@ -80,40 +75,20 @@ class RouteObject {
 
     }
 
-    public function getRouteName() {
-        return $this->routeName;
+    protected function setArguments($arguments) {
+        $this->routeName = $arguments['{RouteName}'];
+        $this->route     = $arguments['{Route}'];
     }
 
-    public function getRoute() {
-        return $this->route;
-    }
-
-    public function getParent() {
-        return $this->parent;
-    }
-
-    public function getRouteType() {
-        return $this->routeType; 
-    }
-
-    public function getRouteDefaults() {
-        return $this->defaults;
-    }
-
-    public function getRouteConstraints() {
-        return $this->constraints;
-    }
-
-    public function getTerminate() {
-        return $this->terminate;
-    }
-
-    public function getProjectPath() {
-        return $this->projectPath;
-    }
-
-    public function getModuleName() {
-        return $this->moduleName;
+    protected function setOptions($options) {
+        
+        $this->parent      = $options['parent'];
+        $this->setRouteType($options['type']); 
+        $this->moduleName  = $options['module'];
+        $this->projectPath = $options['path'];
+        $this->defaults    = $options['defaults'];
+        $this->constraints = $options['constraints'];
+        $this->setTerminate($options['terminate']);
     }
 
 }

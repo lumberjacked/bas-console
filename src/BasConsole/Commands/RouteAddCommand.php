@@ -28,7 +28,9 @@ class RouteAddCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output) {
          
-        $this->routeService->configureRouteObject($input->getArguments(), $input->getOptions());
+        $configuration = array_merge($input->getArguments(), $input->getOptions());
+       
+        $this->routeService->configureRouteObject($configuration);
        
         $message = $this->routeService->executeCommand();
          

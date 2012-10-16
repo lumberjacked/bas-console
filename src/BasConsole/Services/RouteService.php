@@ -27,21 +27,17 @@ class RouteService {
         return $this;
     }
 
-    public function configureRouteObject(array $arguments, array $options) {
+    public function configureRouteObject(array $configuration) {
          
-        if(null !== $options['defaults']) {
-            $options['defaults'] = $this->stringHelper->explodeString($options['defaults']); 
+        if(array_key_exists('defaults', $configuration)) {
+            $configuration['defaults'] = $this->stringHelper->explodeString($configuration['defaults']); 
         }
 
-        if(null !== $options['constraints']) {
-            $options['constraints'] = $this->stringHelper->explodeString($options['constraints']);
+        if(array_key_exists('constraints', $configuration)) {
+            $configuration['constraints'] = $this->stringHelper->explodeString($configuration['constraints']);
         }
-
-        $config = array('arguments' => $arguments,
-                        'options'   => $options,
-                    );
        
-        $this->routeObject->configureObject($config);
+        $this->routeObject->configureObject($configuration);
     }
 
     public function buildRoute() {

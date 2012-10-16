@@ -52,7 +52,9 @@ class ServiceConfiguration extends Config {
                 },
 
                 'RouteObject' => function($sm) {
-                    $routeObject = new Objects\RouteObject();
+                    $factory     = $sm->get('ConfigFactory');
+                    $config      = $factory->getConfigObject();
+                    $routeObject = new Objects\RouteObject($config);
                     return $routeObject;    
                 },
 
