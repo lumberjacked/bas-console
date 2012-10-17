@@ -44,9 +44,10 @@ class RouteService {
         $config = $this->getProjectConfig();
        
         $writer = new \Zend\Config\Writer\PhpArray();
-  
+         var_dump($config);die();
         foreach($config->router->routes as $name => $object) {
-            if($this->routeObject->getModuleName() == $name) {
+            
+            if($this->routeObject->get('RouteName') == $name) {
                 throw new \Exception('I found a route with the same name.  Run `route:update` to modify this route.');
             }
         }
@@ -96,7 +97,7 @@ class RouteService {
     } 
 
     protected function getProjectConfig() {
-        return $this->configHelper->getModuleConfig($this->routeObject->getProjectPath(), $this->routeObject->getModuleName());   
+        return $this->configHelper->getModuleConfig($this->routeObject->get('path'), $this->routeObject->get('module'));   
     }
 
 

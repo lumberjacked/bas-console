@@ -60,9 +60,10 @@ class ConfigHelper
     }
 
     protected function checkIfConfigFileIsActive($moduleName, $path) {
+        
         if(is_file($path . "/module/{$moduleName}/config/module.config.php")) {
-            $configPath    = $this->setConfigPath($this->workingDir . "/module/{$moduleName}/config/module.config.php");
-            $directoryPath = $this->setDirectoryPath($this->workingDir . "/module/{$moduleName}/config");    
+            $configPath    = $this->setConfigPath($path . "/module/{$moduleName}/config/module.config.php");
+            $directoryPath = $this->setDirectoryPath($path . "/module/{$moduleName}/config");    
                     
             return $this->configFactory->getConfigObject(include $configPath, true); 
         } else {

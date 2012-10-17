@@ -40,55 +40,54 @@ class RouteObject {
         foreach($properties as $property => $value) {
             $this->_properties->$property = $value;    
         }
-        var_dump($this->get('{RouteName}'));die();
+
+        $this->finishPropertyConfig();
+    }
+
+    protected function finishPropertyConfig() {
+        
+        if(null != $this->_properties->terminate) {
+            $this->_properties->terminate = $this->configureTerminate($this->_properties->get('terminate'));
+        }
+
+        if($this->_properties->command != "route:update") {
+            $this->_properties->type = $this->configureType($this->_properties->get('type'), $this->_properties->get('parent'));
+        }
+    
     } 
 
     public function get($property) {
         return $this->_properties->get($property);
     }
 
-    protected function setTerminate($terminate) {
-         
+    protected function configureTerminate($terminate = null) {
+        
         if(null != $terminate){
             $terminate = strtolower($terminate);
             if($terminate == 'true') {
-                $this->terminate = true;
+                $terminate = true;
             } else if ($terminate == 'false') {
-                $this->terminate = false;
+                $terminate = false;
             } else {
                 throw new \Exception('`may_terminate` option must be of type Boolean');
             }
         } else {
-            $this->terminate = $terminate; 
+            $terminate = $terminate; 
         }
+        return $terminate;
     }
 
-    protected function setRouteType($type) {
+    protected function configureType($type, $parent) {
         
-        if(null != $this->parent && null == $type) {
-            $this->routeType = 'Segment';
-        } else if (null == $type) {
-            $this->routeType = 'Literal';
-        } else {
-            $this->routeType = $type;
+        $type = strtolower($type);  
+        if(null != $parent && "literal" == $type) {
+            $type = 'Segment';
+
+        } else {    
+            $type = ucfirst($type);
+
         }
-
-    }
-
-    protected function setArguments($arguments) {
-        $this->routeName = $arguments['{RouteName}'];
-        $this->route     = $arguments['{Route}'];
-    }
-
-    protected function setOptions($options) {
-        
-        $this->parent      = $options['parent'];
-        $this->setRouteType($options['type']); 
-        $this->moduleName  = $options['module'];
-        $this->projectPath = $options['path'];
-        $this->defaults    = $options['defaults'];
-        $this->constraints = $options['constraints'];
-        $this->setTerminate($options['terminate']);
+        return $type;
     }
 
 }
