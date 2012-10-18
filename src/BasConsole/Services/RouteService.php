@@ -62,16 +62,11 @@ class RouteService {
 
         if(null != $parent) {
             $this->recursiveAddChild($routes, $parent);
-            $new_routes = $this->configHelper->getConfigObject();
-            $this->recursiveAddKeyBefore($routes, $new_routes, $parent, 'child_routes', 'may_terminate', true);
-            var_dump($routes->toArray());die();
-
-                         
+  
         } else {
             $routes->merge($this->getRoute());
 
-        }
-       var_dump($routes->toArray());die(); 
+        } 
         return $routes;
         
     }
@@ -81,15 +76,27 @@ class RouteService {
         foreach($routes as $key => $value) {
             
             if($key == $parent) {
-                
+                 
                 if(isset($value['child_routes'])) {
+                    
+                    if(!array_key_exists('may_terminate', $value->toArray()) {
+                        $clone = $value->child_routes;
+                        unset($value->child_routes);
+                        $value->may_terminate = true;
+                        $value->child_routes = array();
+                        $value->child_routes->merge($clone);
+                    }
+                    
                     $value->child_routes->merge($this->getRoute());
-                                            
+                                        
                 } else {
+                    $value->may_terminate = true;
+                    
                     $value->child_routes = array();
                     $value->child_routes->merge($this->getRoute());
-                
+                     
                 }
+                
             } else if (isset($value['child_routes'])) { 
                 $this->recursiveAddChild($value['child_routes'], $parent);
 
@@ -97,40 +104,6 @@ class RouteService {
 
         }
 
-    }
-
-    protected function recursiveAddKeyBefore(&$routes, &$new_routes, $parent, $before, $new_key, $new_value) {
-        
-        foreach($routes as $key => $value) {
-            
-            if($key == $parent) {
-                
-                if(array_key_exists($before, $value->toArray())) {
-
-                    $new = $this->configHelper->getConfigObject();
- 
-                    foreach($value as $k => $v) {
-                        if($k === $before) {
-                            $new->$new_key = $new_value;
-                        }
-                        $new->$k = $v;
-                    }
-                    $value->merge($new);
-                    var_dump($value->toArray());die(); 
-                    
-                }   
-                
-            } else if (isset($value['child_routes'])) {
-                $this->recursiveAddKeyBefore($value['child_routes'], $parent, $before, $new_key, $new_value);
-            }
-
-        }
-        /*
-        $clone = clone $array;
-        $array = $this->configHelper->getConfigObject();
-        
-        
-*/
     } 
 
     protected function getProjectConfig() {
