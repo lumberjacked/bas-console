@@ -34,7 +34,7 @@ class RouteAddCommand extends Command
        
         $message = $this->routeService->executeCommand();
          
-        $output->writeln("<info>Route Added to -- {$this->routeService->getRouteObject()->getModuleName()} Module Config File --</info>");
+        $output->writeln("<info>Route Added to -- {$this->routeService->getRouteObject()->get('module')} Module Config File --</info>");
         $output->writeln("<comment>{$message}</comment>");
     }
 

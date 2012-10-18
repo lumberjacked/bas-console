@@ -7,30 +7,16 @@ use BasConsole\Services\RouteService,
 
 class RouteObject {
 
-    protected $_properties;
-
-    protected $moduleName;
-
-    protected $projectPath;
-    
-    protected $routeName; 
-
-    protected $route;
-
-    protected $parent;
-
-    protected $routeType = "Literal";
-
-    protected $terminate;
-
-    protected $defaults;
-
-    protected $constraints; 
+    protected $_properties; 
     
     public function __construct(Config $propertiesConfig) {
         $this->_properties = $propertiesConfig;    
     }
     
+    public function get($property) {
+        return $this->_properties->get($property);
+    }
+ 
     public function configureObject(array $configuration) {
         $this->setObjectProperties($configuration);
     }
@@ -41,11 +27,6 @@ class RouteObject {
             $this->_properties->$property = $value;    
         }
 
-        $this->finishPropertyConfig();
-    }
-
-    protected function finishPropertyConfig() {
-        
         if(null != $this->_properties->terminate) {
             $this->_properties->terminate = $this->configureTerminate($this->_properties->get('terminate'));
         }
@@ -53,13 +34,9 @@ class RouteObject {
         if($this->_properties->command != "route:update") {
             $this->_properties->type = $this->configureType($this->_properties->get('type'), $this->_properties->get('parent'));
         }
-    
+
     } 
-
-    public function get($property) {
-        return $this->_properties->get($property);
-    }
-
+ 
     protected function configureTerminate($terminate = null) {
         
         if(null != $terminate){

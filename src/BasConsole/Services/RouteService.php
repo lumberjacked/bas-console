@@ -22,11 +22,6 @@ class RouteService {
         return $this->cleanUpMessage($this->buildRoute());       
     }
 
-    public function setDefaultType($type = null) {
-        $this->routeObject->setDefaultType($type);
-        return $this;
-    }
-
     public function configureRouteObject(array $configuration) {
          
         if(array_key_exists('defaults', $configuration)) {
@@ -44,7 +39,7 @@ class RouteService {
         $config = $this->getProjectConfig();
        
         $writer = new \Zend\Config\Writer\PhpArray();
-         var_dump($config);die();
+         
         foreach($config->router->routes as $name => $object) {
             
             if($this->routeObject->get('RouteName') == $name) {
@@ -61,16 +56,22 @@ class RouteService {
     }
 
     protected function mergeRoute($routes) {
-        $parent = $this->routeObject->getParent();
+        
+        $parent = $this->routeObject->get('parent');
         
 
         if(null != $parent) {
             $this->recursiveAddChild($routes, $parent);
+            $new_routes = $this->configHelper->getConfigObject();
+            $this->recursiveAddKeyBefore($routes, $new_routes, $parent, 'child_routes', 'may_terminate', true);
+            var_dump($routes->toArray());die();
+
                          
         } else {
             $routes->merge($this->getRoute());
 
         }
+       var_dump($routes->toArray());die(); 
         return $routes;
         
     }
@@ -80,20 +81,56 @@ class RouteService {
         foreach($routes as $key => $value) {
             
             if($key == $parent) {
+                
                 if(isset($value['child_routes'])) {
                     $value->child_routes->merge($this->getRoute());
-                    
+                                            
                 } else {
                     $value->child_routes = array();
                     $value->child_routes->merge($this->getRoute());
+                
                 }
-            } else if (isset($value['child_routes'])) {
-               
+            } else if (isset($value['child_routes'])) { 
                 $this->recursiveAddChild($value['child_routes'], $parent);
+
             } 
 
         }
 
+    }
+
+    protected function recursiveAddKeyBefore(&$routes, &$new_routes, $parent, $before, $new_key, $new_value) {
+        
+        foreach($routes as $key => $value) {
+            
+            if($key == $parent) {
+                
+                if(array_key_exists($before, $value->toArray())) {
+
+                    $new = $this->configHelper->getConfigObject();
+ 
+                    foreach($value as $k => $v) {
+                        if($k === $before) {
+                            $new->$new_key = $new_value;
+                        }
+                        $new->$k = $v;
+                    }
+                    $value->merge($new);
+                    var_dump($value->toArray());die(); 
+                    
+                }   
+                
+            } else if (isset($value['child_routes'])) {
+                $this->recursiveAddKeyBefore($value['child_routes'], $parent, $before, $new_key, $new_value);
+            }
+
+        }
+        /*
+        $clone = clone $array;
+        $array = $this->configHelper->getConfigObject();
+        
+        
+*/
     } 
 
     protected function getProjectConfig() {
@@ -115,12 +152,12 @@ class RouteService {
     protected function getRoute() {
         
         $route = $this->configHelper->getConfigObject();
-        $name  = $this->routeObject->getRouteName();
+        $name  = $this->routeObject->get('RouteName');
         $route->$name = array();
-        $route->$name->type = $this->routeObject->getRouteType();
+        $route->$name->type = $this->routeObject->get('type');
         $route->$name->options = $this->getRouteOptions();
         
-        $terminate = $this->routeObject->getTerminate();
+        $terminate = $this->routeObject->get('terminate');
         if(null != $terminate) {
             $route->$name->may_terminate = $terminate;
         }
@@ -132,10 +169,10 @@ class RouteService {
         
         $options = $this->configHelper->getConfigObject();
 
-        $options->route = $this->routeObject->getRoute();
+        $options->route = $this->routeObject->get('Route');
         
-        $constraints = $this->routeObject->getRouteConstraints();
-        $defaults    = $this->routeObject->getRouteDefaults(); 
+        $constraints = $this->routeObject->get('constraints');
+        $defaults    = $this->routeObject->get('defaults'); 
         
         if(null != $constraints) {
             $options->constraints = array();
