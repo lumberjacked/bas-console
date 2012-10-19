@@ -10,11 +10,11 @@ and scalffolding for your zf2 project.
   - route:delete
 
 ## Requirements
-Dependiencies are setup in the composer.json file.  Currently Composer is the only supported method for requiring dependcies.
+Dependencies are setup in the composer.json file.  Currently Composer is the only supported method for requiring dependencies.
 
 ## Installation
 
-Installation of this module uses composer. For composer documentation, please refer to
+Composer installs all the depdencies, everything is defined in composer.json. For composer documentation, please refer to
 [getcomposer.org](http://getcomposer.org/).
 
 #### Installation steps
