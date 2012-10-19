@@ -15,7 +15,7 @@ class RouteUpdateCommand extends Command
     protected function configure()
     {   
         $this->setName('route:update')->setDescription($this->getDescript())
-             ->addArgument('{RouteName}', InputArgument::REQUIRED, 'The Currently Used Route Name.')
+             ->addArgument('RouteName', InputArgument::REQUIRED, 'The Currently Used Route Name.')
              ->addOption('name', null, InputOption::VALUE_REQUIRED, 'Use this option to update the Route Name')
              ->addOption('route', null, InputOption::VALUE_REQUIRED, 'The actual route to update e.g. /Demo/Album/testing')
              ->addOption('parent', null, InputOption::VALUE_REQUIRED, 'If Updating a Child Route use this to give the parent route name.')
@@ -29,8 +29,10 @@ class RouteUpdateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output) {
          
-        $this->routeService->configureRouteObject($input->getArguments(), $input->getOptions());
+        $configuration = array_merge($input->getArguments(), $input->getOptions());
        
+        $this->routeService->configureRouteObject($configuration);
+        
         $message = $this->routeService->executeCommand();
          
         $output->writeln("<info>Route Updated to -- {$this->routeService->getRouteObject()->getModuleName()} Module Config File --</info>");

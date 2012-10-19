@@ -19,7 +19,16 @@ class RouteService {
     }
     
     public function executeCommand() {
-        return $this->cleanUpMessage($this->buildRoute());       
+        
+        $command = $this->routeObject->get('command'); 
+        switch ($command) {
+            case 'route:add':
+                return $this->cleanUpMessage($this->buildRoute());
+                break;
+            case 'route:update':
+                die('route:update');
+                break;
+        }            
     }
 
     public function configureRouteObject(array $configuration) {
@@ -31,7 +40,7 @@ class RouteService {
         if(array_key_exists('constraints', $configuration)) {
             $configuration['constraints'] = $this->stringHelper->explodeString($configuration['constraints']);
         }
-       
+        
         $this->routeObject->configureObject($configuration);
     }
 

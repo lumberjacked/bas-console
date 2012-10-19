@@ -23,8 +23,14 @@ class RouteObject {
     
     protected function setObjectProperties(array $properties) {
         
+        $extras = array('help', 'quiet', 'verbose', ' version', 'ansi', 'no-ansi', 'no-interaction');   
+        $this->_properties->extras = array();
         foreach($properties as $property => $value) {
-            $this->_properties->$property = $value;    
+            if(!in_array($property, $extras)) {
+                $this->_properties->$property = $value;
+            } else {
+                $this->_properties->extras->$property = $value;
+            }    
         }
 
         if(null != $this->_properties->terminate) {
