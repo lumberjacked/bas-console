@@ -19,10 +19,10 @@ Composer installs all the depdencies, everything is defined in composer.json. Fo
 
 #### Installation steps
 
-  1. `cd my/project/directory`
-  2. `git clone https://github.com/lumberjacked/BasConsole.git`
-  3. run `php composer.phar install`
-  4. alias the project for easy access `alias zf2='~/workspace/BasConsole/console'`
+  - `cd my/project/directory`
+  - `git clone https://github.com/lumberjacked/BasConsole.git`
+  - run `php composer.phar install`
+  - alias the project for easy access `alias zf2='~/workspace/BasConsole/console'`
 
 #### Full configuration options
 
