@@ -1,14 +1,44 @@
-# This is a Command Line Tool to generate zf2 files.  Inspired from Rails command line tool.
+# BasConsole for Zend Framework 2
+
+BasConsole uses Symfony Console to generate Zend Framework 2 files, configs,
+and scalffolding for your zf2 project. 
+
+  - generate:app
+  - generate:module
+  - route:add
+  - route:update
+  - route:delete
+
+## Requirements
+Dependiencies are setup in the composer.json file.  Currently Composer is the only supported method for requiring dependcies.
+
+## Installation
+
+Installation of this module uses composer. For composer documentation, please refer to
+[getcomposer.org](http://getcomposer.org/).
+
+#### Installation steps
+
+  1. `cd my/project/directory`
+  2. `git clone https://github.com/lumberjacked/BasConsole.git`
+  3. run `php composer.phar install`
+  4. alias the project for easy access `alias zf2='~/workspace/BasConsole/console'`
+
+#### Full configuration options
+
+For a list of all available commands 
+
+ * zf2 --help
+ * zf2 command:name --help (For specific help on a command)
 
 ## Usage
 
-- Clone the project to a working directory --
-  git clone git@bitbucket.org:lumberjacked/command.console.git
+ * Read the output of the commands is the easiest way.
 
-- Alias the project to access it from anywhere.
-  .bash_alias add something like --  alias zf2='~/workspace/command.console/console'
+#### Coming Soon
 
-- Trying something new
+ * More Commands to be able to do a viarity of things from the command line.
+ 
 
 
 

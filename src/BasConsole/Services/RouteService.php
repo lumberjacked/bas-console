@@ -39,7 +39,7 @@ class RouteService {
         $config = $this->getProjectConfig();
        
         $writer = new \Zend\Config\Writer\PhpArray();
-         
+        // Need to do some error checking it has happened a couple times where this came through without having router routes 
         foreach($config->router->routes as $name => $object) {
             
             if($this->routeObject->get('RouteName') == $name) {
@@ -79,7 +79,7 @@ class RouteService {
                  
                 if(isset($value['child_routes'])) {
                     
-                    if(!array_key_exists('may_terminate', $value->toArray()) {
+                    if(!array_key_exists('may_terminate', $value->toArray())) {
                         $clone = $value->child_routes;
                         unset($value->child_routes);
                         $value->may_terminate = true;
