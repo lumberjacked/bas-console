@@ -14,11 +14,34 @@ class RouteObject {
     }
     
     public function get($property) {
-        return $this->_properties->get($property);
+        return $this->_properties->property->get($property);
     }
 
     public function getArray($property) {
-        return $this->_properties->get($property)->toArray();
+        return $this->_properties->property->get($property)->toArray();
+    }
+    
+    public function getAll() {
+        $array = array();
+        
+        foreach($this->_properties->property as $key => $value) {
+            
+            if(null != $value) {
+                $array[$key] = $value;
+            }
+        }
+        return $array;
+    }
+
+    public function getUpdateOptions() {
+        $array  = array();
+        $remove = array('module', 'command', 'RouteName');
+        foreach($this->_properties->property as $key => $value) {
+            if(!in_array($key, $remove) && null != $value) {
+                $array[$key] = $value;
+            }
+        }
+        return $array;
     }
  
     public function configureObject(array $configuration) {
@@ -28,21 +51,22 @@ class RouteObject {
     protected function setObjectProperties(array $properties) {
         
         $extras = array('help', 'quiet', 'verbose', ' version', 'ansi', 'no-ansi', 'no-interaction');   
-        $this->_properties->extras = array();
+        $this->_properties->property = array();
+        $this->_properties->extras  = array();
         foreach($properties as $property => $value) {
             if(!in_array($property, $extras)) {
-                $this->_properties->$property = $value;
+                $this->_properties->property->$property = $value;
             } else {
                 $this->_properties->extras->$property = $value;
             }    
         }
 
-        if(null != $this->_properties->terminate) {
-            $this->_properties->terminate = $this->configureTerminate($this->_properties->get('terminate'));
+        if(null != $this->_properties->property->terminate) {
+            $this->_properties->property->terminate = $this->configureTerminate($this->_properties->property->get('terminate'));
         }
 
-        if($this->_properties->command != "route:update") {
-            $this->_properties->type = $this->configureType($this->_properties->get('type'), $this->_properties->get('parent'));
+        if($this->_properties->property->command != "route:update") {
+            $this->_properties->property->type = $this->configureType($this->_properties->property->get('type'), $this->_properties->property->get('parent'));
         }
 
     } 

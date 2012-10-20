@@ -26,7 +26,7 @@ class RouteService {
                 return $this->cleanUpMessage($this->buildRoute());
                 break;
             case 'route:update':
-                die('route:update');
+                return $this->updateRoute();
                 break;
         }            
     }
@@ -62,6 +62,20 @@ class RouteService {
         $this->configHelper->newConfigToFile($config);
        
         return $writer->toString($this->getRoute());
+    }
+
+    protected function updateRoute() {
+       $config = $this->getProjectConfig();
+
+       if(isset($config->router->routes)) {
+            $routes = $config->router->routes;
+            $name   = $this->routeObject->get('RouteName');
+            $this->recursiveFindRoute($routes, $name);
+       }
+        
+       $config->router->routes->merge($routes);
+       $this->configHelper->newConfigToFile($config);
+ 
     }
 
     protected function mergeRoute($routes) {
@@ -111,6 +125,31 @@ class RouteService {
 
             } 
 
+        }
+
+    }
+
+    protected function recursiveFindRoute(&$routes, $name, $clone = null) {
+               
+        foreach($routes as $key => $value) {
+            
+            if($key === $name) {        
+                $options = $this->routeObject->getUpdateOptions();
+                if(array_key_exists('name', $options)) {
+                    $newName = $options['name'];
+                    $routes[$newName] = $routes[$key];
+                    unset($options['name']);
+
+                }
+                foreach($options as $k => $v) {
+             
+                    $routes[$newName][$k] = $v;
+                }
+
+            } else if (isset($value['child_routes'])) {              
+                $this->recursiveFindRoute($value->child_routes, $name, $clone);
+
+            }
         }
 
     } 
