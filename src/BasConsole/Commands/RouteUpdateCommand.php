@@ -34,9 +34,9 @@ class RouteUpdateCommand extends Command
         $this->routeService->configureRouteObject($configuration);
         
         $message = $this->routeService->executeCommand();
-         
-        $output->writeln("<info>Route Updated to -- {$this->routeService->getRouteObject()->getModuleName()} Module Config File --</info>");
-        $output->writeln("<comment>{$message}</comment>");
+
+        // I want to move this into the service so that I can just throw the $message into writeln and forget about it 
+        $output->writeln("<info>Route Updated in -- {$this->routeService->getRouteObject()->get('module')} Module Config File --</info>");
     }
 
     private function getDescript() {
