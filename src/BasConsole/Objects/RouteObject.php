@@ -16,6 +16,10 @@ class RouteObject {
     public function get($property) {
         return $this->_properties->get($property);
     }
+
+    public function getArray($property) {
+        return $this->_properties->get($property)->toArray();
+    }
  
     public function configureObject(array $configuration) {
         $this->setObjectProperties($configuration);

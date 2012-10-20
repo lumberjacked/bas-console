@@ -153,17 +153,17 @@ class RouteService {
 
         $options->route = $this->routeObject->get('Route');
         
-        $constraints = $this->routeObject->get('constraints');
-        $defaults    = $this->routeObject->get('defaults'); 
+        $constraints = $this->routeObject->getArray('constraints'); 
+        $defaults    = $this->routeObject->getArray('defaults'); 
         
-        if(null != $constraints) {
+        if(!empty($constraints)) {
             $options->constraints = array();
             foreach($constraints as $k => $v) {
                 $options->constraints->$k = $v;
             }
         }
 
-        if(null != $defaults) {
+        if(!empty($defaults)) {
             $options->defaults = array();
             foreach($defaults as $k => $v) {
                 $options->defaults->$k = $v;
