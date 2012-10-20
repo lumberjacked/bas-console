@@ -24,7 +24,11 @@ class StringHelper
             }
         }
 
-        return $result;
+        if(!empty($result)) {
+            return $result;
+        } else {
+            return NULL;
+        }
     }
 
     public function recursiveArrayReplace(&$array, $search, $replace) {
