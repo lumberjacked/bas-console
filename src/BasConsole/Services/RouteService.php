@@ -129,7 +129,7 @@ class RouteService {
 
     }
 
-    protected function recursiveFindRoute(&$routes, $name, $clone = null) {
+    protected function recursiveFindRoute(&$routes, $name) {
                
         foreach($routes as $key => $value) {
             
@@ -138,6 +138,7 @@ class RouteService {
                 if(array_key_exists('name', $options)) {
                     $newName = $options['name'];
                     $routes[$newName] = $routes[$key];
+                    unset($routes[$key];
                     unset($options['name']);
 
                 }
@@ -147,7 +148,7 @@ class RouteService {
                 }
 
             } else if (isset($value['child_routes'])) {              
-                $this->recursiveFindRoute($value->child_routes, $name, $clone);
+                $this->recursiveFindRoute($value->child_routes, $name);
 
             }
         }
