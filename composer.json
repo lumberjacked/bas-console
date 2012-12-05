@@ -1,5 +1,5 @@
 {
-    "name": "lumberjacked/BasConsole",
+    "name": "lumberjacked/bas-console",
     "description": "Command Console to generate zf2 files",
     "type": "library",
     "license": "MIT",
