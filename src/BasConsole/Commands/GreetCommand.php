@@ -22,7 +22,7 @@ class GreetCommand extends Command
     {
         $name = $input->getArgument('name');
         if($name) {
-            $text = 'Looser' . $name;
+            $text = 'Looser ' . $name;
         } else {
             $text = 'Your still a Looser ';
         }
