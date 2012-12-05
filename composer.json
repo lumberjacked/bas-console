@@ -7,10 +7,13 @@
         {
             "name": "Spencer Bragg",
             "email": "sbragg.braggaboutsystems@gmail.com"
+        },
+        {
+            "name": "James Carr",
+            "email": "james.r.carr@gmail.com"
         }
     ],
     "minimum-stability":"dev",
-
     "repositories": [
         {
             "type": "composer",
@@ -30,8 +33,13 @@
         "psr-0": {
             "BasConsole": "src/"
         }
-    }
+    },
+    "config": {
+        "bin-dir" : "bin"
+    },
+    "bin": [
+        "bin/zf2"
+    ]
 
-    
 
 }
