@@ -138,7 +138,7 @@ class RouteService {
                 if(array_key_exists('name', $options)) {
                     $newName = $options['name'];
                     $routes[$newName] = $routes[$key];
-                    unset($routes[$key];
+                    unset($routes[$key]);
                     unset($options['name']);
 
                 }
