@@ -1,5 +1,8 @@
 # BasConsole for Zend Framework 2
 
+Master: [![Build Status](https://secure.travis-ci.org/lumberjacked/bas-console.png?branch=master)](http://travis-ci.org/lumberjacked/bas-console)
+Dev: [![Build Status](https://secure.travis-ci.org/lumberjacked/bas-console.png?branch=dev)](http://travis-ci.org/lumberjacked/bas-console)
+
 BasConsole uses Symfony Console to generate Zend Framework 2 files, configs,
 and scalffolding for your zf2 project. 
 
